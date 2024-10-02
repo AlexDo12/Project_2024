@@ -1,14 +1,15 @@
 # CSCE 435 Group project
 
-## 0. Group number: 
+## 0. Group number: 8
 
 ## 1. Group members:
-1. First
-2. Second
-3. Third
-4. Fourth
+1. Alex Do
+2. Alex Byrd
+3. Jose Rojo
+4. Matthew Livesay
 
 ## 2. Project topic (e.g., parallel sorting algorithms)
+Examining the performance of parallelized sorting algorithms
 
 ### 2a. Brief project description (what algorithms will you be comparing and on what architectures)
 
