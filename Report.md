@@ -21,6 +21,36 @@ Examining the performance of parallelized sorting algorithms
 ### 2b. Pseudocode for each parallel algorithm
 - For MPI programs, include MPI calls you will use to coordinate between processes
 
+#### Radix Sort
+
+
+```
+//master thread
+creates array to be sorted
+initializes MPI with p processes
+
+for each chunck of bits (ie bits 0-7, 8-15, ...) 
+    split array into p chunks
+    send each part of array to the coresponding process
+
+    receives offsets and values from worker threads 
+    assembles the array
+
+confirms returned array is sorted
+
+
+//worker thread 
+for each chunck of bits (ie bits 0-7, 8-15, ...)
+    receive array
+    computes histogram
+    sends histogram data to processes that need it
+
+    receives required histogram data 
+    computes offset for each value (uses formula in AMD parellel radix paper)
+    sends offsets and values to master process
+
+```
+
 ### 2c. Evaluation plan - what and how will you measure and compare
 - Input sizes, Input types
 - Strong scaling (same problem size, increase number of processors/nodes)
