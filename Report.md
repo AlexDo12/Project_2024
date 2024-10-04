@@ -1,6 +1,7 @@
 # CSCE 435 Group project
 
 ## 0. Group number: 8
+we will be communicating using an iMessage group chat. This has been created already and all members have responded
 
 ## 1. Group members:
 1. Alex Do
