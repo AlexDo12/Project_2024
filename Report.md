@@ -24,33 +24,32 @@ Examining the performance of parallelized sorting algorithms
 
 #### Radix Sort
 
-
 ```
-//master thread
-creates array to be sorted
-initializes MPI with p processes
+// master process
+generate array
 
-for each chunck of bits (ie bits 0-7, 8-15, ...) 
-    split array into p chunks
-    send each part of array to the coresponding process
+for each chunck of digits (likely single digit in base 10 but gains may be had processing 2-3 digits at a time)
 
-    receives offsets and values from worker threads 
-    assembles the array
+    split array and send to workers
 
-confirms returned array is sorted
+    receive histograms from workers
+    combine histograms from all workers (might be a reduce like call to acomplish this)
+
+    calculate prefix sum (iterates over histogram array which will be short)
+
+    build output array 
+    copy output array to origional array
+
+confirm array is sorted
 
 
-//worker thread 
-for each chunck of bits (ie bits 0-7, 8-15, ...)
-    receive array
-    computes histogram
-    sends histogram data to processes that need it
-
-    receives required histogram data 
-    computes offset for each value (uses formula in AMD parellel radix paper)
-    sends offsets and values to master process
-
+// worker process
+for each chunk of digits
+    receive array chunk
+    calculate histogram of the chunck 
+    send histogram to master process
 ```
+parameters will need to be tweaked for radix sort. increasing the chunck size would reduce the number of times the master thread has to iterate over the entire array, at the cost of increased memory usage and inter-process communication. There also might be a way to add some parallelism to the building and copying of the output array 
 
 ### 2c. Evaluation plan - what and how will you measure and compare
 - Input sizes, Input types
