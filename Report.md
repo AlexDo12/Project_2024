@@ -49,7 +49,10 @@ for each chunk of digits
     calculate histogram of the chunck 
     send histogram to master process
 ```
-### Merge Sort
+parameters will need to be tweaked for radix sort. increasing the chunck size would reduce the number of times the master thread has to iterate over the entire array, at the cost of increased memory usage and inter-process communication. There also might be a way to add some parallelism to the building and copying of the output array 
+
+
+#### Merge Sort
 ```
  // Master process
         for i = 1 to array_size - 1
@@ -115,7 +118,11 @@ function merge(array A, int left, int mid, int right)
 end function
 
 ```
-parameters will need to be tweaked for radix sort. increasing the chunck size would reduce the number of times the master thread has to iterate over the entire array, at the cost of increased memory usage and inter-process communication. There also might be a way to add some parallelism to the building and copying of the output array 
+
+#### Sample Sort
+```
+pseudo code base
+```
 
 ### 2c. Evaluation plan - what and how will you measure and compare
 - Input sizes, Input types  
