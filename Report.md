@@ -121,7 +121,38 @@ end function
 
 #### Sample Sort
 ```
-pseudo code base
+Initialize MPI (MPI_init, MPI_Comm size & rank)
+
+Note: The master process basically has the worker process tasks weaved into it, as it only does additional computations
+when the workers are done. If we didn't treat the master process as an additional worker process, we would lose a good amount of performance.
+
+// Master process
+        for (worker processes)
+            Use MPI_Send to even amount of data to all worker processes
+        
+        Sort the master's chunk
+
+        MPI Gather the samples from each processor
+        Sort samples (use quicksort here, only master process)
+        Select (m-1) splitters
+        MPI Broadcast splitters to all processors
+
+        Split the chunk into buckets based on splitters
+
+        Gather sorted buckets from all processes
+        for (worker processes)
+            recv data for each process
+
+        Merge the sorted buckets
+
+
+// Worker processes
+        Use MPI_recv to recieve arrays from master process
+        Sort the chunks (use quicksort here, per process)
+        Gather sampled elements back to the master
+        Recv splitters from master
+        Split the chunk into buckets based on splitters
+        Send the corresponding buckets back 
 ```
 
 ### 2c. Evaluation plan - what and how will you measure and compare
