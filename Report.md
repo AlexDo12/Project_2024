@@ -1,13 +1,15 @@
 # CSCE 435 Group project
 
 ## 0. Group number: 8
-we will be communicating using an iMessage group chat. This has been created already and all members have responded
 
 ## 1. Group members:
 1. Alex Do
 2. Alex Byrd
 3. Jose Rojo
 4. Matthew Livesay
+
+## 1.1 Communication:
+We will be communicating using an iMessage group chat. This has been created already and all members have responded.
 
 ## 2. Project topic (e.g., parallel sorting algorithms)
 The project includes parallelizing sequential sorting algorithms that include bitonic sort, sample sort, merge sort, and radix sort. After parallelizing the algorithms, we will examine their performance by varying the number of input sizes, the number of processors involved in the operation, and how the initial input array is generated.
