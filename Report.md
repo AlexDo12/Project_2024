@@ -10,11 +10,11 @@ we will be communicating using an iMessage group chat. This has been created alr
 4. Matthew Livesay
 
 ## 2. Project topic (e.g., parallel sorting algorithms)
-Examining the performance of parallelized sorting algorithms
+The project includes parallelizing sequential sorting algorithms that include bitonic sort, sample sort, merge sort, and radix sort. After parallelizing the algorithms, we will examine their performance by varying the number of input sizes, the number of processors involved in the operation, and how the initial input array is generated.
 
 ### 2a. Brief project description (what algorithms will you be comparing and on what architectures)
 
-- Bitonic Sort: Alex Do
+- Bitonic Sort (Alex Do): Bitonic Sort is a divide-and-conquer algorithm that operates by constructing a sequence of elements that forms a bitonic sequence, which is basically a sequence that first increases and then decreases. The algorithm then recursively sorts this bitonic sequence by performing compare-exchange operations to produce a sorted sequence. When bitonic sort is parallelized, the core operations of comparing and exchanging elements are distributed across multiple processors.
 - Sample Sort: Alex Byrd
 - Merge Sort: Jose Rojo
 - Radix Sort: Matthew Livesay
