@@ -22,6 +22,70 @@ Examining the performance of parallelized sorting algorithms
 ### 2b. Pseudocode for each parallel algorithm
 - For MPI programs, include MPI calls you will use to coordinate between processes
 
+#### Bitonic Sort
+
+```
+function ParallelBitonicSort()
+    Initialize MPI w/ MPI_Init()
+    Get rank and size w/ MPI_Comm_rank() and MPI_Comm_size()
+
+    total_elements = Get from user input and verify it's 2^n
+    elements_per_process = total_elements / size
+
+    // Scattering input array
+    if rank == 0
+        global_array = initialize_array(total_elements)
+    else
+        global_array = None
+
+    local_array = Allocate array of size elements_per_process
+    Scatter portions of the global array from the root process w/ MPI_Scatter()
+
+    // Main bitonic sort loop
+    for k = 2 to total_elements by multiplying by 2
+        for j = k // 2 down to 1 by dividing by 2
+
+            // Determine sorting direction
+            if (rank & (k // 2)) == 0
+            ascending = true
+            else
+            ascending = false
+
+            // Calculate partner process
+            partner = rank XOR j
+
+            if partner < size
+            // Perform exchange and merge
+            CompareExchange(local_array, partner, ascending)
+
+    Gather data from all processes and assembles it into a single array on the root process w/ MPI.Gather()
+
+    Finalize MPI w/ MPI.Finalize()
+
+// Helper functions during bitonic sort
+function compareExchange(int local_array[], int partner, bool ascending)
+    if rank < partner
+        Send local_array to partner
+        Receive partner_array from partner
+    else
+        Receive partner_array from partner
+        Send local_array to partner
+
+    combined_array = Merge(local_array, partner_array, ascending)
+
+    // Determine which half to keep
+    if ( (rank < partner and ascending) or (rank > partner and not ascending) )
+        local_array = first half of combined_array 
+    else
+        local_array = second half of combined_array
+
+function merge(int array1[], int array2[], bool ascending)
+    merged_array = array1 + array2
+    Sort merged_array in ascending or descending order based on 'ascending' flag
+    return merged_array
+
+```
+
 #### Radix Sort
 
 ```
