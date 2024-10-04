@@ -49,6 +49,72 @@ for each chunk of digits
     calculate histogram of the chunck 
     send histogram to master process
 ```
+### Merge Sort
+```
+ // Master process
+        for i = 1 to array_size - 1
+            Use MPI Send to even amount of data to all worker processes
+
+        for i = 1 to size - 1
+            Use MPI Recieve to get sorted arrays from worker processes
+        call "merge" function to merge sorted arrays
+
+// Worker processes
+        Use MPI_recv to recieve arrays from master process
+        call "sequentialMergeSort" function to sort recieved array
+        Use MPI_send sorted arrays back to the master process
+
+//Sequential Merge Sort
+  function mergeSort(array A, int left, int right)
+    if (left < right)  // Check if the array has more than one element
+        int mid = (left + right) / 2
+
+        // Sort the left half
+        mergeSort(A, left, mid)
+
+        // Sort the right half
+        mergeSort(A, mid + 1, right)
+
+        // Merge the sorted halves
+        merge(A, left, mid, right)
+end function
+
+function merge(array A, int left, int mid, int right)
+    // Create temporary arrays to hold the left and right halves
+    int leftArray[mid - left + 1]
+    int rightArray[right - mid]
+
+    // Copy data to temporary arrays
+    for i = 0 to mid - left
+        leftArray[i] = A[left + i]
+    for j = 0 to right - mid - 1
+        rightArray[j] = A[mid + 1 + j]
+
+    // Merge the temporary arrays back into A
+    int i = 0, j = 0, k = left
+    while (i < size of leftArray and j < size of rightArray)
+        if (leftArray[i] <= rightArray[j])
+            A[k] = leftArray[i]
+            i++
+        else
+            A[k] = rightArray[j]
+            j++
+        k++
+
+    // Copy remaining elements of leftArray, if any
+    while (i < size of leftArray)
+        A[k] = leftArray[i]
+        i++
+        k++
+
+    // Copy remaining elements of rightArray, if any
+    while (j < size of rightArray)
+        A[k] = rightArray[j]
+        j++
+        k++
+end function
+
+```
 parameters will need to be tweaked for radix sort. increasing the chunck size would reduce the number of times the master thread has to iterate over the entire array, at the cost of increased memory usage and inter-process communication. There also might be a way to add some parallelism to the building and copying of the output array 
 
 ### 2c. Evaluation plan - what and how will you measure and compare
