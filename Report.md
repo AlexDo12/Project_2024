@@ -217,7 +217,7 @@ when the workers are done. If we didn't treat the master process as an additiona
     - input array lengths of 128, 1024, 8192, and 131072
     - all inputs will be arrays of integers to allow comparitson with radix sort
 - Strong scaling (same problem size, increase number of processors/nodes)
-    - strong scaling will be evaluated by running problem size of ..., ..., and ... on 2, 4, 8, 16, 32, and 64 processes 
+    - strong scaling will be evaluated by running problem size of 128, 1024, and 8192 on 2, 4, 8, 16, 32, and 64 processes 
 - Weak scaling (increase problem size, increase number of processors)
     - 128 on 2 processes
     - 8192 on 16 processes
