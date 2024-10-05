@@ -214,12 +214,12 @@ when the workers are done. If we didn't treat the master process as an additiona
 
 ### 2c. Evaluation plan - what and how will you measure and compare
 - Input sizes, Input types  
-    - input array lengths of 128, 1024, 8192, and 131072
-    - all inputs will be arrays of integers to allow comparitson with radix sort
+    - The input array sizes will always be 2^N, and therefore of length 2^16, 2^18, 2^20, 2^22, 2^24, 2^26, 2^28
+    - These input array types will be either sorted, random, reverse sorted, or 1% perturbed
+    - All values in the input arrays will be integers
 - Strong scaling (same problem size, increase number of processors/nodes)
-    - strong scaling will be evaluated by running problem size of 128, 1024, and 8192 on 2, 4, 8, 16, 32, and 64 processes 
+    - We will analyze how the sorting algorithms scale when increasing the number of processors while keeping the problem size constant, allowing us to determine how well an algorithm can take advantage of additional computational resources for the same problem. That is, the execution time should decrease as more processors are added.
+    - Therefore, we will compare the execution time of the parallel sorting algorithms with varying processor counts (2, 4, 8, 16, 32, 64, 128, 256, 512, 1024) for each input array size
 - Weak scaling (increase problem size, increase number of processors)
-    - 128 on 2 processes
-    - 8192 on 16 processes
-    - 131072 on 32 processes 
-    - 1048576 on 64 processes
+    - We will evaluate the performance when both the problem size and the number of processors increase proportionally, allowing us to determine if the algorithm can handle larger problems as more resources (processors) are added. That is, the algorithm should be maintaining a constant execution time as the processors and problem size scale together
+    - Therefore, we will compare the execution time of the parallel sorting algorithms with increasing array sizes (2^16, 2^18, 2^20, 2^22, 2^24, 2^26, 2^28) with corresponding increasing processor counts (2, 4, 8, 16, 32, 64, 128, 256, 512, 1024)
