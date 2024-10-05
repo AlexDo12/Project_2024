@@ -212,6 +212,14 @@ when the workers are done. If we didn't treat the master process as an additiona
         Send the corresponding buckets back 
 ```
 
+The Parallel Sample Sort algorithm distributes data across multiple processes, 
+where each process (including the master) sorts its chunk concurrently using some
+sequential sorting method (in this case, quicksort). After sorting, processes send
+samples to the master, which selects splitters and broadcasts them. Each process
+splits its sorted chunk into buckets based on the splitters, exchanges buckets with
+other processes, and sorts them locally. The final sorted data is then gathered
+and merged, efficiently balancing computation and communication across all processes.
+
 ### 2c. Evaluation plan - what and how will you measure and compare
 - Input sizes, Input types  
     - The input array sizes will always be 2^N, and therefore of length 2^16, 2^18, 2^20, 2^22, 2^24, 2^26, 2^28
