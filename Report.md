@@ -89,33 +89,24 @@ function merge(int array1[], int array2[], bool ascending)
 ```
 
 #### Radix Sort
+```
+each processor starts with a portion of the array to be sorted (will likely generate it)
+
+for each chunck of bits
+    iterate over entire portion of array to generate a histogram
+
+    send histogram to all other processes
+    receive histograms from all other processes using mpi_reduce or similar
+
+    combine all histograms (this might be acomplished by the mpi call that collects all histograms)
+    calculate prefix sum array using histogram array
+
+    calculate processor offset using mpi_rank
+    combine offset and prefix sum array to find final offset for each value in array portion
+
+    use MPI call to place each value in a global data structure 
 
 ```
-// master process
-generate array
-
-for each chunck of digits (likely single digit in base 10 but gains may be had processing 2-3 digits at a time)
-
-    split array and send to workers
-
-    receive histograms from workers
-    combine histograms from all workers (might be a reduce like call to acomplish this)
-
-    calculate prefix sum (iterates over histogram array which will be short)
-
-    build output array 
-    copy output array to origional array
-
-confirm array is sorted
-
-
-// worker process
-for each chunk of digits
-    receive array chunk
-    calculate histogram of the chunck 
-    send histogram to master process
-```
-parameters will need to be tweaked for radix sort. increasing the chunck size would reduce the number of times the master thread has to iterate over the entire array, at the cost of increased memory usage and inter-process communication. There also might be a way to add some parallelism to the building and copying of the output array 
 
 
 #### Merge Sort
