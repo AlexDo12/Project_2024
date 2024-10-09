@@ -26,4 +26,4 @@ module load GCCcore/8.3.0
 
 CALI_CONFIG="spot(output=p${processes}-a${array_size}.cali, \
     time.variance,profile.mpi)" \
-mpirun -np $processes ./mergesort $array_size
+mpirun -np $processes ./main $array_size

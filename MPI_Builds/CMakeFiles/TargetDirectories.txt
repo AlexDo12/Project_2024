@@ -1,0 +1,3 @@
+/scratch/user/matthew.livesay/Project_2024/MPI_Builds/CMakeFiles/rebuild_cache.dir
+/scratch/user/matthew.livesay/Project_2024/MPI_Builds/CMakeFiles/edit_cache.dir
+/scratch/user/matthew.livesay/Project_2024/MPI_Builds/CMakeFiles/main.dir
