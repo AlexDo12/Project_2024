@@ -7,8 +7,8 @@
 #include "bitonic.h"
 #include "sample.h"
 
-using std::cout, std::cerr;
-
+using std::cout, std::cerr, std::endl;
+using std::vector;
 
 // generates arry chunck
 // args:
@@ -63,6 +63,18 @@ vector<int> GenerateArrayChunck(int arrayLength, int numProcesses, int offset, i
   }
 
   return chunck;
+}
+
+
+void vectorTester() {
+  for (int i = 0; i < 4; i++) {
+    vector<int> currarr = GenerateArrayChunck(32, 4, i, 1);
+    cout << "[";
+    for (int j = 0; j < currarr.size(); j++) {  // Use size() instead of length()
+      cout << currarr.at(j) << " ";  // Use j as the index here
+    }
+    cout << "]" << endl;
+  }
 }
 
 
