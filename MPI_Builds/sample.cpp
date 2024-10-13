@@ -105,7 +105,15 @@ void test_sample(vector<int>& sorted) {
     MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
     MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
     
+    double whole_computation_time;
+    if (taskid == MASTER) {
+        whole_computation_time = MPI_Wtime();
+    }
     sample(sorted);
+    if (taskid == MASTER) {
+        whole_computation_time = MPI_Wtime() - whole_computation_time;
+        printf("Total time: %f\r\n", whole_computation_time);
+    }
 
     // if (taskid == MASTER) {
     //     printf("==== test_sample ====\n[");
