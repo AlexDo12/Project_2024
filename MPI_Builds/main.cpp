@@ -138,9 +138,23 @@ int main (int argc, char *argv[]) {
     // mergesort();
     // bitonic();
     // radix();
-    // sample();
+    double whole_computation_time;
+    if (taskid == MASTER) {
+        whole_computation_time = MPI_Wtime();
+    }
 
-    
+    test_sample(reverse_vec);
+
+    if (taskid == MASTER) {
+        whole_computation_time = MPI_Wtime() - whole_computation_time;
+        printf("Total time: %f\r\n", whole_computation_time);
+    }
+
+
+    if (taskid == MASTER) {
+        printf("Finished program successfully\r\n");
+    }
+    MPI_Finalize();
 
 
 
