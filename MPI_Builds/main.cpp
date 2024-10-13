@@ -76,6 +76,15 @@ vector<int> GenerateArrayChunck(int arrayLength, int start, int order) {
 //     // vector<int> GenerateArrayChunck(length, 0, order);
 // }
 
+bool is_vec_sorted(vector<int> values) {
+    for (int i = 0; i < values.size() - 1; ++i) {
+        if (values.at(i) > values.at(i + 1)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 int main (int argc, char *argv[]) {
     // Required
@@ -112,10 +121,19 @@ int main (int argc, char *argv[]) {
     }
     MPI_Comm_split(MPI_COMM_WORLD, thread_color, taskid, &worker_comm);
 
-    vector<int> sorted_vec = GenerateArrayChunck(array_size, 0, 1);
-    vector<int> reverse_vec = GenerateArrayChunck(array_size, 0, 2);
-    vector<int> scrambled_vec = GenerateArrayChunck(array_size, 0, 3);
-    vector<int> random_vec = GenerateArrayChunck(array_size, 0, 4);
+    vector<int> sorted_vec;
+    vector<int> reverse_vec;
+    vector<int> scrambled_vec;
+    vector<int> random_vec;
+
+    // Only generate vectors on master to save mem
+    if (taskid == MASTER) {
+        sorted_vec = GenerateArrayChunck(array_size, 0, 1);
+        reverse_vec = GenerateArrayChunck(array_size, 0, 2);
+        scrambled_vec = GenerateArrayChunck(array_size, 0, 3);
+        random_vec = GenerateArrayChunck(array_size, 0, 4);
+
+    }
             
     // mergesort();
     // bitonic();
@@ -161,6 +179,12 @@ int main (int argc, char *argv[]) {
     //         printf("%d, ", elm);
     //     }
     //     printf("]\n");
+
+    // if (is_vec_sorted(reverse_vec)) {
+    //     printf("Vector is sorted\r\n");
+    // } else {
+    //     printf("Vector is NOT sorted\r\n");
+    // }
     // }
         
     return 0;
