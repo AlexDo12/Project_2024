@@ -24,18 +24,7 @@ using std::vector;
 
 // ============ Code ============
 
-// generates arry chunck
-// args:
-// total array length length
-// number of processes
-// what process is calling
-// array order
-// 1: sorted
-// 2: reverse sorted
-// 3: 1% scrambled
-// 4: random
-// returns:
-// pointer to array start
+// Generates an array given the length, what value to start at, and what order to sort it by.
 vector<int> GenerateArrayChunck(int arrayLength, int start, int order) {
 
     vector<int> chunck(arrayLength);
@@ -50,7 +39,9 @@ vector<int> GenerateArrayChunck(int arrayLength, int start, int order) {
 
         // reverse sorted
         case 2:
-            //TODO: implement
+            for(int i = 0; i < arrayLength; i ++) {
+                chunck.at(i) = arrayLength + start - i - 1;
+            }
         break;
 
         // 1% scrambled
@@ -78,45 +69,27 @@ vector<int> GenerateArrayChunck(int arrayLength, int start, int order) {
     return chunck;
 }
 
-
-vector<int> vectorTester(int length, int num_processes, int taskid, int order) {
-    double time_taken;
-    if (taskid == MASTER) {
-        printf("================\r\nvector tester running\r\n");
-        time_taken = MPI_Wtime();
-    }
-
-    int local_size = (length / num_processes);
-    int global_size = length;
-
-    vector<int> local_vec = GenerateArrayChunck(local_size, local_size*taskid, order);
-    vector<int> gathered_vec(length);
-
-
-    MPI_Gather(local_vec.data(), local_size, MPI_INT, gathered_vec.data(), 
-        local_size, MPI_INT, MASTER, MPI_COMM_WORLD);
-
-
-    if (taskid == MASTER) {
-        // printf("==== Combined Vector ====\n");
-        // printf("[");
-        // for (const auto& elem : gathered_vec) {
-        //     printf("%d, ", elem);
-        // }
-        // printf("]");
-
-
-        time_taken = MPI_Wtime() - time_taken;
-        printf("Time taken was %f seconds\r\n", time_taken);
-    }
-
-    return local_vec;
-}
+// The goal was for this to generate the values in parallel. However, It only worked for up to length of 2^26, not 2^28. Couldn't figure out why.
+// For now, doing this single threaded is not an issue. Its 2 seconds vs 5 seconds at max size.
+// Look at commit history for "checkpoint" if you want to implement this.
+// vector<int> generate_values(int length, int num_processes, int taskid, int order) {
+//     // vector<int> GenerateArrayChunck(length, 0, order);
+// }
 
 
 int main (int argc, char *argv[]) {
-    int taskid, numtasks, numworkers;
-    double time_taken;
+    // Required
+    int taskid, numtasks, numworkers, array_size;
+    int rc;
+
+    if (argc == 2) {
+        array_size = atoi(argv[1]);
+    }
+
+    else {
+        printf("\n Please provide the array size\n");
+        return 0;
+    }
 
     MPI_Init(&argc,&argv);
     MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
@@ -124,7 +97,7 @@ int main (int argc, char *argv[]) {
 
     if (numtasks < 2 ) {
         printf("Need at least two MPI tasks. Quitting...\n");
-        // MPI_Abort(MPI_COMM_WORLD, rc);
+        MPI_Abort(MPI_COMM_WORLD, rc);
         exit(1);
         }
     numworkers = numtasks-1;
@@ -139,20 +112,56 @@ int main (int argc, char *argv[]) {
     }
     MPI_Comm_split(MPI_COMM_WORLD, thread_color, taskid, &worker_comm);
 
-        
+    vector<int> sorted_vec = GenerateArrayChunck(array_size, 0, 1);
+    vector<int> reverse_vec = GenerateArrayChunck(array_size, 0, 2);
+    vector<int> scrambled_vec = GenerateArrayChunck(array_size, 0, 3);
+    vector<int> random_vec = GenerateArrayChunck(array_size, 0, 4);
+            
     // mergesort();
     // bitonic();
     // radix();
     // sample();
 
-    vectorTester(268435456, numtasks, taskid, 1);
+    
 
 
 
 
 
 
-    //TODO: test array checker
+
+
+
+
+
+
+
+    // Can uncomment this and test values if you want
+    // if (taskid == MASTER) {
+    //     printf("==== SORTED ====\n[");
+    //     for (const auto& elm : sorted_vec) {
+    //         printf("%d, ", elm);
+    //     }
+    //     printf("]\n");
+
+    //     printf("==== REVERSE ====\n[");
+    //     for (const auto& elm : reverse_vec) {
+    //         printf("%d, ", elm);
+    //     }
+    //     printf("]\n");
+
+    //     printf("==== SCRAMBLE ====\n[");
+    //     for (const auto& elm : scrambled_vec) {
+    //         printf("%d, ", elm);
+    //     }
+    //     printf("]\n");
+
+    //     printf("==== RANDOM ====\n[");
+    //     for (const auto& elm : random_vec) {
+    //         printf("%d, ", elm);
+    //     }
+    //     printf("]\n");
+    // }
         
     return 0;
 }
