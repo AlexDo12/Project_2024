@@ -11,5 +11,5 @@ cmake \
     -Dcaliper_DIR=/scratch/group/csce435-f24/Caliper/caliper/share/cmake/caliper \
     -Dadiak_DIR=/scratch/group/csce435-f24/Adiak/adiak/lib/cmake/adiak \
     .
-
+    
 make

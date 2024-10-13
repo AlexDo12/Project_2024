@@ -81,10 +81,13 @@ void vectorTester() {
 int main() {
   std::cout << "Running main" << std::endl;
     
-  mergesort();
-  bitonic();
-  radix();
-  sample();
+  // mergesort();
+  // bitonic();
+  // radix();
+  // sample();
+
+  printf("================\r\nvector tester running\r\n");
+  vectorTester();
 
   //TODO: test array checker
     
