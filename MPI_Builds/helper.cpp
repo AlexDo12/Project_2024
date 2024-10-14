@@ -3,8 +3,6 @@
 #include "mpi.h"
 #include "helper.h"
 
-using std::cout, std::cerr, std::endl;
-
 /* ============ LOCAL FUNCTIONS ============ */
 vector<int> GenerateArrayChunck(int arrayLength, int start, int order);
 
@@ -51,7 +49,7 @@ vector<int> GenerateArrayChunck(int arrayLength, int start, int order) {
         
         // "error handling"
         default:
-            cerr << "Error: incorrect order\n" << endl;
+            printf("Error: incorrect order\n");
     }
 
     return chunck;

@@ -6,13 +6,10 @@
 
 #include "mpi.h"
 
+// Sample sort function. Takes the vector input, taskid, and numtasks.
 void sample(vector<int>& data, int taskid, int numtasks) {
-    // int taskid, numtasks;
-    // MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
-    // MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
-
     int n;
-    if (taskid == 0) {
+    if (taskid == MASTER) {
         n = data.size();  // Total number of elements
     }
     MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -37,7 +34,7 @@ void sample(vector<int>& data, int taskid, int numtasks) {
 
     // Master selects splitters and broadcasts them
     vector<int> splitters(m - 1);
-    if (taskid == 0) {
+    if (taskid == MASTER) {
         std::sort(all_samples.begin(), all_samples.end());
         for (int i = 1; i < m; ++i) {
             splitters[i - 1] = all_samples[i * m];
@@ -83,48 +80,75 @@ void sample(vector<int>& data, int taskid, int numtasks) {
 
     // Concatenate all received buckets and locally merge them
     std::sort(recv_data.begin(), recv_data.end());
-    MPI_Gather(recv_data.data(), total_recv, MPI_INT, data.data(), chunk_size, MPI_INT, 0, MPI_COMM_WORLD);
+    // MPI_Gather(recv_data.data(), total_recv, MPI_INT, data.data(), chunk_size, MPI_INT, 0, MPI_COMM_WORLD);
+
+
+    // We can't use MPI_Gather because the buckets can be different sized, so we have to use gatherv
+    // Gather the counts of elements each process will send
+    vector<int> all_recv_counts;
+    if (taskid == MASTER) {
+        all_recv_counts.resize(numtasks);
+    }
+    MPI_Gather(&total_recv, 1, MPI_INT, all_recv_counts.data(), 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+    // Calc displacements on the root process
+    vector<int> all_recv_displs;
+    if (taskid == MASTER) {
+        all_recv_displs.resize(numtasks);
+        all_recv_displs[0] = 0;
+        for (int i = 1; i < numtasks; ++i) {
+            all_recv_displs[i] = all_recv_displs[i - 1] + all_recv_counts[i - 1];
+        }
+        // Ensure the receive buffer is large enough
+        data.resize(all_recv_displs[numtasks - 1] + all_recv_counts[numtasks - 1]);
+    }
+
+    // Use MPI_Gatherv to gather data with variable counts
+    MPI_Gatherv(recv_data.data(), total_recv, MPI_INT,
+                data.data(), all_recv_counts.data(), all_recv_displs.data(), MPI_INT, 0, MPI_COMM_WORLD);
+
 }
 
+// Test function that tests the sample sort for 4 different arangements of numbers.
 void test_sample(vector<int>& sorted, vector<int>& reverse, vector<int>& scrambled, vector<int>& random) {
     int taskid, numtasks;
     MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
     MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
 
-    if (taskid == MASTER) {
-        printf("Length: %d\n", random.size());
-        printf("==== before sort ====\n[");
-        for (const auto& elm : random) {
-            printf("%d, ", elm);
-        }
-        printf("]\n");
-    }
+    // if (taskid == MASTER) {
+    //     printf("Length: %d\n", random.size());
+    //     printf("==== before sort ====\n[");
+    //     for (const auto& elm : random) {
+    //         printf("%d, ", elm);
+    //     }
+    //     printf("]\n");
+    // }
     
     double whole_computation_time;
     if (taskid == MASTER) {
         whole_computation_time = MPI_Wtime();
     }
-    // sample(sorted);
-    // sample(reverse);
-    // sample(scrambled);
+    sample(sorted, taskid, numtasks);
+    sample(reverse, taskid, numtasks);
+    sample(scrambled, taskid, numtasks);
     sample(random, taskid, numtasks);
     if (taskid == MASTER) {
         whole_computation_time = MPI_Wtime() - whole_computation_time;
         printf("Total time: %f\r\n", whole_computation_time);
     }
 
-    if (taskid == MASTER) {
-        printf("==== after sort ====\n[");
-        for (const auto& elm : random) {
-            printf("%d, ", elm);
-        }
-        printf("]\n");
-    }
+    // if (taskid == MASTER) {
+    //     printf("==== after sort ====\n[");
+    //     for (const auto& elm : random) {
+    //         printf("%d, ", elm);
+    //     }
+    //     printf("]\n");
+    // }
 
-    // check_sorted(sorted, "Sample", "sorted", taskid);
-    // check_sorted(reverse, "Sample", "reverse", taskid);
-    // check_sorted(scrambled, "Sample", "scrambled", taskid);
-    // check_sorted(random, "Sample", "random", taskid);
+    check_sorted(sorted, "Sample", "sorted", taskid);
+    check_sorted(reverse, "Sample", "reverse", taskid);
+    check_sorted(scrambled, "Sample", "scrambled", taskid);
+    check_sorted(random, "Sample", "random", taskid);
 
 
 }

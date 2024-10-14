@@ -1,6 +1,7 @@
 #include <vector>
+#include <string>
 
-using std::vector;
+using std::vector, std::string;
 
 // ============ Defines ============
 #define MASTER 0
