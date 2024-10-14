@@ -98,7 +98,7 @@ bool is_vec_sorted(vector<int> values, int taskid) {
 }
 
 // Cleanly print out if the sort correctly sorts a certain function
-void check_sorted(vector<int> data, char* sort_type, char* name, int taskid) {
+void check_sorted(vector<int> data, const char* sort_type, const char* name, int taskid) {
     bool sorted = is_vec_sorted(data, taskid);
     if (taskid == MASTER) {
         if (sorted) {

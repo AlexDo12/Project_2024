@@ -1,7 +1,6 @@
 #include <vector>
-#include <string>
 
-using std::vector, std::string;
+using std::vector;
 
 // ============ Defines ============
 #define MASTER 0
@@ -10,5 +9,5 @@ using std::vector, std::string;
 
 
 bool is_vec_sorted(vector<int> values, int taskid);
-void check_sorted(vector<int> data, char* sort_type, char* name, int taskid);
+void check_sorted(vector<int> data, const char* sort_type, const char* name, int taskid);
 vector<int> generate_vector(int length, int num_processes, int taskid, int order);

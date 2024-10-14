@@ -10,7 +10,6 @@
 #include "bitonic.h"
 #include "sample.h"
 
-using std::cout, std::cerr, std::endl;
 using std::vector;
 
 
