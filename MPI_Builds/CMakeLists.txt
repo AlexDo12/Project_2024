@@ -4,7 +4,7 @@ find_package(MPI REQUIRED)
 find_package(caliper REQUIRED)
 find_package(adiak REQUIRED)
 
-add_executable(main main.cpp mergesort.cpp radix.cpp sample.cpp bitonic.cpp)
+add_executable(main main.cpp mergesort.cpp radix.cpp sample.cpp bitonic.cpp helper.cpp)
 
 message(STATUS "MPI includes : ${MPI_INCLUDE_PATH}")
 message(STATUS "Caliper includes : ${caliper_INCLUDE_DIR}")
