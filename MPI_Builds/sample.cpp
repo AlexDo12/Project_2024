@@ -6,10 +6,10 @@
 
 #include "mpi.h"
 
-void sample(vector<int>& data) {
-    int taskid, numtasks;
-    MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
-    MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
+void sample(vector<int>& data, int taskid, int numtasks) {
+    // int taskid, numtasks;
+    // MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
+    // MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
 
     int n;
     if (taskid == 0) {
@@ -18,7 +18,7 @@ void sample(vector<int>& data) {
     MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
     int m = numtasks;
     int chunk_size = n / m;
-    std::vector<int> chunk(chunk_size);
+    vector<int> chunk(chunk_size);
 
     // Scatter data among workers
     MPI_Scatter(data.data(), chunk_size, MPI_INT, chunk.data(), chunk_size, MPI_INT, 0, MPI_COMM_WORLD);
@@ -27,16 +27,16 @@ void sample(vector<int>& data) {
     std::sort(chunk.begin(), chunk.end());
 
     // Gather samples from each process to the master
-    std::vector<int> selected_samples(m);
+    vector<int> selected_samples(m);
     for (int i = 0; i < m; ++i) {
         selected_samples[i] = chunk[i * chunk.size() / m];
     }
 
-    std::vector<int> all_samples(m * m);
+    vector<int> all_samples(m * m);
     MPI_Gather(selected_samples.data(), m, MPI_INT, all_samples.data(), m, MPI_INT, 0, MPI_COMM_WORLD);
 
     // Master selects splitters and broadcasts them
-    std::vector<int> splitters(m - 1);
+    vector<int> splitters(m - 1);
     if (taskid == 0) {
         std::sort(all_samples.begin(), all_samples.end());
         for (int i = 1; i < m; ++i) {
@@ -46,14 +46,14 @@ void sample(vector<int>& data) {
     MPI_Bcast(splitters.data(), m - 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     // Split the local chunk into buckets based on splitters
-    std::vector<std::vector<int>> buckets(m);
+    vector<vector<int>> buckets(m);
     for (int element : chunk) {
         int i = std::upper_bound(splitters.begin(), splitters.end(), element) - splitters.begin();
         buckets[i].push_back(element);
     }
 
     // Gather sorted buckets from all processes
-    std::vector<int> send_counts(m), recv_counts(m);
+    vector<int> send_counts(m), recv_counts(m);
     for (int i = 0; i < m; ++i) {
         send_counts[i] = buckets[i].size();
     }
@@ -63,9 +63,9 @@ void sample(vector<int>& data) {
     for (int i = 0; i < recv_counts.size(); ++i) {
         total_recv += recv_counts[i];
     }
-    std::vector<int> recv_data(total_recv);
+    vector<int> recv_data(total_recv);
 
-    std::vector<int> send_displs(m), recv_displs(m);
+    vector<int> send_displs(m), recv_displs(m);
     send_displs[0] = 0;
     recv_displs[0] = 0;
     for (int i = 1; i < m; ++i) {
@@ -73,7 +73,7 @@ void sample(vector<int>& data) {
         recv_displs[i] = recv_displs[i - 1] + recv_counts[i - 1];
     }
 
-    std::vector<int> send_data;
+    vector<int> send_data;
     for (int i = 0; i < m; ++i) {
         send_data.insert(send_data.end(), buckets[i].begin(), buckets[i].end());
     }
@@ -92,6 +92,7 @@ void test_sample(vector<int>& sorted, vector<int>& reverse, vector<int>& scrambl
     MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
 
     if (taskid == MASTER) {
+        printf("Length: %d\n", random.size());
         printf("==== before sort ====\n[");
         for (const auto& elm : random) {
             printf("%d, ", elm);
@@ -106,7 +107,7 @@ void test_sample(vector<int>& sorted, vector<int>& reverse, vector<int>& scrambl
     // sample(sorted);
     // sample(reverse);
     // sample(scrambled);
-    sample(random);
+    sample(random, taskid, numtasks);
     if (taskid == MASTER) {
         whole_computation_time = MPI_Wtime() - whole_computation_time;
         printf("Total time: %f\r\n", whole_computation_time);
