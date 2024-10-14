@@ -2,6 +2,7 @@
 #include "sample.h"
 #include <algorithm>
 #include <numeric>
+#include "helper.h"
 
 #include "mpi.h"
 
@@ -82,44 +83,47 @@ void sample(vector<int>& data) {
 
     // Concatenate all received buckets and locally merge them
     std::sort(recv_data.begin(), recv_data.end());
-
-    // Gather all sorted chunks to the master
-    std::vector<int> sorted_data;
-    if (taskid == 0) {
-        sorted_data.resize(n);
-    }
-    MPI_Gather(recv_data.data(), total_recv, MPI_INT, sorted_data.data(), chunk_size, MPI_INT, 0, MPI_COMM_WORLD);
-
-    // Master merges all sorted chunks
-    // if (taskid == 0) {
-    //     std::cout << "Sorted data: ";
-    //     for (int value : sorted_data) {
-    //         std::cout << value << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
+    MPI_Gather(recv_data.data(), total_recv, MPI_INT, data.data(), chunk_size, MPI_INT, 0, MPI_COMM_WORLD);
 }
 
-void test_sample(vector<int>& sorted) {
+void test_sample(vector<int>& sorted, vector<int>& reverse, vector<int>& scrambled, vector<int>& random) {
     int taskid, numtasks;
     MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
     MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
+
+    if (taskid == MASTER) {
+        printf("==== before sort ====\n[");
+        for (const auto& elm : random) {
+            printf("%d, ", elm);
+        }
+        printf("]\n");
+    }
     
     double whole_computation_time;
     if (taskid == MASTER) {
         whole_computation_time = MPI_Wtime();
     }
-    sample(sorted);
+    // sample(sorted);
+    // sample(reverse);
+    // sample(scrambled);
+    sample(random);
     if (taskid == MASTER) {
         whole_computation_time = MPI_Wtime() - whole_computation_time;
         printf("Total time: %f\r\n", whole_computation_time);
     }
 
-    // if (taskid == MASTER) {
-    //     printf("==== test_sample ====\n[");
-    //     for (const auto& elm : sorted) {
-    //         printf("%d, ", elm);
-    //     }
-    //     printf("]\n");
-    // }
+    if (taskid == MASTER) {
+        printf("==== after sort ====\n[");
+        for (const auto& elm : random) {
+            printf("%d, ", elm);
+        }
+        printf("]\n");
+    }
+
+    // check_sorted(sorted, "Sample", "sorted", taskid);
+    // check_sorted(reverse, "Sample", "reverse", taskid);
+    // check_sorted(scrambled, "Sample", "scrambled", taskid);
+    // check_sorted(random, "Sample", "random", taskid);
+
+
 }

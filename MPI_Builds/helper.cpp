@@ -85,11 +85,28 @@ vector<int> generate_vector(int length, int num_processes, int taskid, int order
     }
 }
 
-bool is_vec_sorted(vector<int> values) {
-    for (int i = 0; i < values.size() - 1; ++i) {
-        if (values.at(i) > values.at(i + 1)) {
-            return false;
+// TODO: Make this parallel
+// Checks if the vector is sorted
+bool is_vec_sorted(vector<int> values, int taskid) {
+    if (taskid == MASTER) {
+        for (int i = 0; i < values.size() - 1; ++i) {
+            if (values.at(i) > values.at(i + 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+// Cleanly print out if the sort correctly sorts a certain function
+void check_sorted(vector<int> data, char* sort_type, char* name, int taskid) {
+    bool sorted = is_vec_sorted(data, taskid);
+    if (taskid == MASTER) {
+        if (sorted) {
+            printf("%s sort correctly sorted the \"%s\" vector.\n", sort_type, name);
+        } else {
+            printf("%s sort correctly sorted the \"%s\" vector.\n", sort_type, name);
         }
     }
-    return true;
 }

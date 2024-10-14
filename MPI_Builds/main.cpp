@@ -59,7 +59,7 @@ int main (int argc, char *argv[]) {
     // mergesort();
     // bitonic();
     // radix();
-    test_sample(reverse_vec);
+    test_sample(sorted_vec, reverse_vec, scrambled_vec, random_vec);
 
 
 

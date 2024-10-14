@@ -8,5 +8,6 @@ using std::vector;
 #define FROM_WORKER 2          /* setting a message type */
 
 
-bool is_vec_sorted(vector<int> values);
+bool is_vec_sorted(vector<int> values, int taskid);
+void check_sorted(vector<int> data, char* sort_type, char* name, int taskid);
 vector<int> generate_vector(int length, int num_processes, int taskid, int order);
