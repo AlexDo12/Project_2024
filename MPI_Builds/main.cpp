@@ -83,7 +83,7 @@ int main (int argc, char *argv[]) {
     }
 
     // This only generates data on the master thread, everything else is an empty vec
-    vector<int> data = generate_vector(array_size, numtasks, taskid, 1);
+    vector<int> data = generate_vector(array_size, numtasks, taskid, input_type_num);
             
     if (sort_type == "merge") {
         printf("running merge\n");
