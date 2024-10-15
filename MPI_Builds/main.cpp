@@ -27,6 +27,13 @@ int main (int argc, char *argv[]) {
         sort_type = argv[2];
         input_type = argv[3];
 
+        // Verify array size is a power of two to prevent algorithms breaking and needless credit usage
+        if ((array_size == 0) || (array_size & (array_size - 1))) {
+            printf("Array size must be a power of two, not %d", array_size);
+            return 1;
+        }
+
+        // Process input array
         if (input_type == "sorted") {
             printf("sorted\n");
             input_type_num = 1;
@@ -61,6 +68,14 @@ int main (int argc, char *argv[]) {
         exit(1);
         }
     numworkers = numtasks-1;
+
+    // Verify number of processes are a power of two to prevent algorithms breaking and needless credit usage
+    if ((numtasks == 0) || (numtasks & (numtasks - 1))) {
+        if (taskid == MASTER) {
+            printf("Number of processes must be a power of two, not %d", numtasks);
+        }
+        MPI_Abort(MPI_COMM_WORLD, 1);
+    }
 
     //Create communicator for worker processes
     MPI_Comm worker_comm;
