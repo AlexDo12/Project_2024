@@ -6,7 +6,7 @@ using std::vector;
 
 #define MASTER 0
 
-void sample(vector<int>& data); // Declaration of the mergesort function
-void test_sample(vector<int>& sorted, vector<int>& reverse, vector<int>& scrambled, vector<int>& random); // test function
+void sample(vector<int>& data, int taskid, int numtasks); // Declaration of the mergesort function
+void test_sample(vector<int>& data); // test function
 
 #endif

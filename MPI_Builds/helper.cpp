@@ -104,7 +104,7 @@ void check_sorted(vector<int> data, const char* sort_type, const char* name, int
         if (sorted) {
             printf("%s sort correctly sorted the \"%s\" vector.\n", sort_type, name);
         } else {
-            printf("%s sort correctly sorted the \"%s\" vector.\n", sort_type, name);
+            printf("%s sort DID NOT correctly sort the \"%s\" vector.\n", sort_type, name);
         }
     }
 }

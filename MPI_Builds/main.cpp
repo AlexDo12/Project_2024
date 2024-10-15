@@ -1,6 +1,7 @@
 // ============ Includes ============
 #include <iostream>
 #include <cstdlib>                    // For rand()
+#include <string>
 
 #include "mpi.h"
 #include "helper.h"
@@ -16,15 +17,37 @@ using std::vector;
 // ============ Code ============
 int main (int argc, char *argv[]) {
     // Required
-    int taskid, numtasks, numworkers, array_size;
+    int taskid, numtasks, numworkers, array_size, input_type_num;
+    string sort_type;
+    string input_type;
     int rc;
 
-    if (argc == 2) {
+    if (argc < 5) {
         array_size = atoi(argv[1]);
+        sort_type = argv[2];
+        input_type = argv[3];
+
+        if (input_type == "sorted") {
+            printf("sorted\n");
+            input_type_num = 1;
+        } else if (input_type == "reverse") {
+            printf("reverse\n");
+            input_type_num = 2;
+        } else if (input_type == "1perturbed") {
+            printf("1 perturbed\n");
+            input_type_num = 3;
+        } else if (input_type == "random") {
+            printf("random\n");
+            input_type_num = 4;
+        } else {
+            printf("Unknown input type. Try again.\n");
+            return 0;
+        }
+        
     }
 
     else {
-        printf("\n Please provide the array size\n");
+        printf("\n Please provide all arguments (array size, # of procs, sort type, type of input)\n");
         return 0;
     }
 
@@ -49,16 +72,38 @@ int main (int argc, char *argv[]) {
     }
     MPI_Comm_split(MPI_COMM_WORLD, thread_color, taskid, &worker_comm);
 
+    if (taskid == MASTER) {
+        printf("Num of proc: %d\n", numtasks);
+        // for (int i = 0; i < argc; i++) {
+        //     printf("Argument %d: %s\n", i, argv[i]);
+        // }
+        printf("Sort type: %s\n", sort_type);
+        printf("Input type: %s\n", input_type);
+
+    }
+
     // This only generates data on the master thread, everything else is an empty vec
-    vector<int> sorted_vec = generate_vector(array_size, numtasks, taskid, 1);
-    vector<int> reverse_vec = generate_vector(array_size, numtasks, taskid, 2);
-    vector<int> scrambled_vec = generate_vector(array_size, numtasks, taskid, 3);
-    vector<int> random_vec = generate_vector(array_size, numtasks, taskid, 4);
+    vector<int> data = generate_vector(array_size, numtasks, taskid, 1);
             
-    // mergesort();
-    // bitonic();
-    // radix();
-    test_sample(sorted_vec, reverse_vec, scrambled_vec, random_vec);
+    if (sort_type == "merge") {
+        printf("running merge\n");
+        // mergesort();
+    } else if (sort_type == "bitonic") {
+        printf("running bitonic\n");
+        // bitonic();
+    } else if (sort_type == "radix") {
+        printf("running radix\n");
+        // radix();
+    } else if (sort_type == "sample") {
+        printf("running sample\n");
+        // test_sample(data);
+    } else {
+        printf("Unknown sort type.");
+    }
+
+    if (taskid == MASTER) {
+        printf("Input type: %d\n", input_type_num);
+    }
 
 
 

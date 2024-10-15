@@ -110,45 +110,23 @@ void sample(vector<int>& data, int taskid, int numtasks) {
 }
 
 // Test function that tests the sample sort for 4 different arangements of numbers.
-void test_sample(vector<int>& sorted, vector<int>& reverse, vector<int>& scrambled, vector<int>& random) {
+void test_sample(vector<int>& data) {
     int taskid, numtasks;
     MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
     MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
 
-    // if (taskid == MASTER) {
-    //     printf("Length: %d\n", random.size());
-    //     printf("==== before sort ====\n[");
-    //     for (const auto& elm : random) {
-    //         printf("%d, ", elm);
-    //     }
-    //     printf("]\n");
-    // }
-    
-    double whole_computation_time;
-    if (taskid == MASTER) {
-        whole_computation_time = MPI_Wtime();
-    }
-    sample(sorted, taskid, numtasks);
-    sample(reverse, taskid, numtasks);
-    sample(scrambled, taskid, numtasks);
-    sample(random, taskid, numtasks);
-    if (taskid == MASTER) {
-        whole_computation_time = MPI_Wtime() - whole_computation_time;
-        printf("Total time: %f\r\n", whole_computation_time);
-    }
 
-    // if (taskid == MASTER) {
-    //     printf("==== after sort ====\n[");
-    //     for (const auto& elm : random) {
-    //         printf("%d, ", elm);
-    //     }
-    //     printf("]\n");
-    // }
+    // Perform sorts
+    sample(data, taskid, numtasks);
+    // sample(reverse, taskid, numtasks);
+    // sample(scrambled, taskid, numtasks);
+    // sample(random, taskid, numtasks);
 
-    check_sorted(sorted, "Sample", "sorted", taskid);
-    check_sorted(reverse, "Sample", "reverse", taskid);
-    check_sorted(scrambled, "Sample", "scrambled", taskid);
-    check_sorted(random, "Sample", "random", taskid);
+    // Check if the arrays are sorted
+    check_sorted(data, "Sample", "sorted", taskid);
+    // check_sorted(reverse, "Sample", "reverse", taskid);
+    // check_sorted(scrambled, "Sample", "scrambled", taskid);
+    // check_sorted(random, "Sample", "random", taskid);
 
 
 }

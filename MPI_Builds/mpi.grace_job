@@ -19,11 +19,12 @@
 #
 array_size=$1
 processes=$2
+input_type=$3
 
 module load intel/2020b       # load Intel software stack
 module load CMake/3.12.1
 module load GCCcore/8.3.0
 
 CALI_CONFIG="spot(output=p${processes}-a${array_size}.cali, \
-    time.variance,profile.mpi)" \
-mpirun -np $processes ./main $array_size
+    time.variance,profile.mpi)" \ 
+mpirun -np $processes ./main $array_size $input_type
