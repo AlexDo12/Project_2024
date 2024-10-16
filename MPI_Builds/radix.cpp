@@ -1,8 +1,15 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 #include "mpi.h"
 
 using std::vector;
+
+
+int getBits(int num, int shift, int r) {
+    return (num >> shift) & ((1 << r) - 1);
+}
+
 
 void radix(std::vector<int>& local_data, int total_elements, int r, int max_value, MPI_Comm comm) {
     int world_size, world_rank;
@@ -68,14 +75,14 @@ void testRadix(vector<int>& data) {
   MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
   MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-  int chunckLength = length / world_size;
+  int chunckLength = data.size() / world_size;
   //BUG POTENTIAL: may need + 1 on end
   // TODO: replace with mpi scatter
   vector<int> currchunck(data.begin() + (world_rank*chunckLength), data.begin() + (world_rank*chunckLength + chunckLength));
 
   // sort array
   int maxVal = INT32_MAX;
-  radix(currchunck, data.size(), 8, maxVal, MPI_COMM_WORLD)
+  radix(currchunck, data.size(), 8, maxVal, MPI_COMM_WORLD);
 
   // verify sorted
   std::vector<int> global_data;
