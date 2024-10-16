@@ -11,12 +11,22 @@
 #include "bitonic.h"
 #include "sample.h"
 
+#include <caliper/cali.h>
+#include <caliper/cali-manager.h>
+#include <adiak.hpp>
+
 using std::vector;
 using std::string;
 
 
 // ============ Code ============
 int main (int argc, char *argv[]) {
+    CALI_CXX_MARK_FUNCTION;
+
+    // Create caliper ConfigManager object
+    cali::ConfigManager mgr;
+    mgr.start();
+
     // Required
     int taskid, numtasks, numworkers, array_size, input_type_num;
     std::string sort_type;
@@ -86,13 +96,37 @@ int main (int argc, char *argv[]) {
     }
     MPI_Comm_split(MPI_COMM_WORLD, thread_color, taskid, &worker_comm);
 
+    CALI_MARK_BEGIN("data_init_runtime");
+    
     // This only generates data on the master thread, everything else is an empty vec
     vector<int> data = generate_vector(array_size, numtasks, taskid, input_type_num);
-            
+
+    CALI_MARK_END("data_init_runtime");
+
+    adiak::init(NULL);
+    adiak::launchdate();    // launch date of the job
+    adiak::libraries();     // Libraries used
+    adiak::cmdline();       // Command line used to launch the job
+    adiak::clustername();   // Name of the cluster
+    adiak::value("algorithm", sort_type); // The name of the algorithm you are using (e.g., "merge", "bitonic")
+    adiak::value("programming_model", "mpi"); // e.g. "mpi"
+    adiak::value("data_type", "int"); // The datatype of input elements (e.g., double, int, float)
+    adiak::value("size_of_data_type", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
+    adiak::value("input_size", array_size); // The number of elements in input dataset (1000)
+    adiak::value("input_type", input_type); // For sorting, this would be choices: ("Sorted", "ReverseSorted", "Random", "1_perc_perturbed")
+    adiak::value("num_procs", numtasks); // The number of processors (MPI ranks)
+    adiak::value("group_num", 8); // The number of your group (integer, e.g., 1, 10)
+    adiak::value("implementation_source", "online"); // Where you got the source code of your algorithm. choices: ("online", "ai", "handwritten").
+    
+    
     if (sort_type == "merge") {
-        // printf("running merge\n");
-        test_mergesort(data);
-    } else if (sort_type == "bitonic") {
+        //call merge sort 
+        parallel_merge_sort(data);
+        adiak::value("scalability", "weak"); // The scalability of your algorithm. choices: ("strong", "weak")
+
+    } 
+    
+    else if (sort_type == "bitonic") {
         // printf("running bitonic\n");
         // bitonic();
     } else if (sort_type == "radix") {
@@ -100,14 +134,25 @@ int main (int argc, char *argv[]) {
         testRadix(data);
     } else if (sort_type == "sample") {
         // printf("running sample\n");
-        // test_sample(data);
+        test_sample(data);
     } else {
         printf("Unknown sort type.");
     }
 
+    CALI_MARK_BEGIN("correctness_check");
+
+    //checking correctness
+    check_sorted(data, sort_type.c_str(), input_type.c_str(), taskid);
+
+    CALI_MARK_END("correctness_check");
+
     if (taskid == MASTER) {
         printf("Finished program successfully\r\n");
     }
+    
+    // Flush Caliper output before finalizing MPI
+    mgr.stop();
+    mgr.flush();
     MPI_Finalize();
 
 

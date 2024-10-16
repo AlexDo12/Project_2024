@@ -8,6 +8,7 @@ using namespace std;
 
 // Function for parallel merge sort
 void parallel_merge_sort(vector<int>& data) {
+    
     int taskid, numtasks;
     MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
     MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
@@ -18,44 +19,68 @@ void parallel_merge_sort(vector<int>& data) {
     if (taskid == 0) {
         n = data.size();
     }
+
+    CALI_MARK_BEGIN("comm");
+    CALI_MARK_BEGIN("comm_small");
+
     MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-    // Calculate the fixed chunk size
+    CALI_MARK_END("comm_small");
+    CALI_MARK_END("comm");
+
+    // Calculate the size of subarrays (even distribution)
     int local_size = n / numtasks;
     vector<int> local(local_size);
+
+    CALI_MARK_BEGIN("comm");
+    CALI_MARK_BEGIN("comm_large");
 
     // Scatter the data evenly to all processes
     MPI_Scatter(data.data(), local_size, MPI_INT, local.data(), local_size, MPI_INT, 0, MPI_COMM_WORLD);
 
+    CALI_MARK_END("comm_large");
+    CALI_MARK_END("comm");
+
+    CALI_MARK_BEGIN("comp");
+    CALI_MARK_BEGIN("comp_small");
+
     // Each process sorts its local subarray
     mergesort(local, 0, local_size - 1);
 
-    // Begin recursive pairwise merging
-    int step = 1;
-    while (step < numtasks) {
-        if (taskid % (2 * step) == 0) {
-            // Receive data from taskid + step
-            if (taskid + step < numtasks) {
-                vector<int> partner_data(local_size);
-                MPI_Recv(partner_data.data(), local_size, MPI_INT, taskid + step, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                
-                // Merge local data with received data
-                local = mergeArrays(local, partner_data);
-            }
-        } else {
-            // Send local data to taskid - step
-            int destination = taskid - step;
-            MPI_Send(local.data(), local_size, MPI_INT, destination, 0, MPI_COMM_WORLD);
-            break;
-        }
-        step *= 2;
-    }
+    CALI_MARK_END("comp_small");
+    CALI_MARK_END("comp");
 
-    // The master process (taskid == 0) now holds the fully merged array
+    CALI_MARK_BEGIN("comm");
+    CALI_MARK_BEGIN("comm_large");
+
+    // Gather sorted subarrays back at the root process
+    MPI_Gather(local.data(), local_size, MPI_INT, data.data(), local_size, MPI_INT, 0, MPI_COMM_WORLD);
+
+    CALI_MARK_END("comm_large");
+    CALI_MARK_END("comm");
+
+    CALI_MARK_BEGIN("comp");
+    CALI_MARK_BEGIN("comp_large");
+    
+    // The root process (taskid == 0) merges the fully gathered data
     if (taskid == 0) {
-        data = local;
+        
+        // Initialize merged array with the first subarray (rank 0's part)
+        vector<int> merged(data.begin(), data.begin() + local_size);
+
+        // Sequentially merge the other gathered subarrays
+        for (int i = 1; i < numtasks; ++i) {
+            vector<int> subarray(data.begin() + i * local_size, data.begin() + (i + 1) * local_size);
+            merged = mergeArrays(merged, subarray); // Merge into the final result
+        }
+
+        data = merged; // Final sorted array
     }
+    CALI_MARK_END("comp_large");
+    CALI_MARK_END("comp");
 }
+
+
 
 
 
@@ -110,27 +135,3 @@ vector<int> mergeArrays(const vector<int>& a, const vector<int>& b) {
     return result;
 }
 
-// Test function that tests the merge sort for different arrangements of numbers.
-void test_mergesort(vector<int>& vec) {
-    int taskid, numtasks;
-    MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
-    MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
-
-    double whole_computation_time;
-    if (taskid == 0) {
-        whole_computation_time = MPI_Wtime();
-    }
-
-    // Apply the parallel_merge_sort function for each arrangement
-    parallel_merge_sort(vec);
- 
-
-    if (taskid == 0) {
-        whole_computation_time = MPI_Wtime() - whole_computation_time;
-        printf("Total time: %f\r\n", whole_computation_time);
-    }
-
-    // Check if arrays are sorted after merge sort
-    check_sorted(vec, "MergeSort", "hi", taskid);
- 
-}

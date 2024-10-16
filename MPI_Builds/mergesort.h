@@ -12,6 +12,5 @@ vector<int> mergeArrays(const vector<int>& a, const vector<int>& b); // Merge ar
 
 // Parallel Merge Sort declarations
 void parallel_merge_sort(vector<int>& data); // Declaration of the parallel merge sort function
-void test_mergesort(vector<int>& vec); // Test function for merge sort
 
 #endif
