@@ -90,17 +90,17 @@ int main (int argc, char *argv[]) {
     vector<int> data = generate_vector(array_size, numtasks, taskid, input_type_num);
             
     if (sort_type == "merge") {
-        printf("running merge\n");
+        // printf("running merge\n");
         // mergesort();
     } else if (sort_type == "bitonic") {
-        printf("running bitonic\n");
+        // printf("running bitonic\n");
         // bitonic();
     } else if (sort_type == "radix") {
         printf("running radix\n");
-        // radix();
+        testRadix(data);
     } else if (sort_type == "sample") {
-        printf("running sample\n");
-        test_sample(data);
+        // printf("running sample\n");
+        // test_sample(data);
     } else {
         printf("Unknown sort type.");
     }
