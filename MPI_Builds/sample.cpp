@@ -115,18 +115,9 @@ void test_sample(vector<int>& data) {
     MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
     MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
 
-
     // Perform sorts
     sample(data, taskid, numtasks);
-    // sample(reverse, taskid, numtasks);
-    // sample(scrambled, taskid, numtasks);
-    // sample(random, taskid, numtasks);
 
     // Check if the arrays are sorted
     check_sorted(data, "Sample", "sorted", taskid);
-    // check_sorted(reverse, "Sample", "reverse", taskid);
-    // check_sorted(scrambled, "Sample", "scrambled", taskid);
-    // check_sorted(random, "Sample", "random", taskid);
-
-
 }
