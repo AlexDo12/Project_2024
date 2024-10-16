@@ -91,7 +91,7 @@ int main (int argc, char *argv[]) {
             
     if (sort_type == "merge") {
         // printf("running merge\n");
-        // mergesort();
+        test_mergesort(data);
     } else if (sort_type == "bitonic") {
         // printf("running bitonic\n");
         // bitonic();
