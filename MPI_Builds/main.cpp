@@ -103,6 +103,7 @@ int main (int argc, char *argv[]) {
 
     CALI_MARK_END("data_init_runtime");
 
+    // Metadata
     adiak::init(NULL);
     adiak::launchdate();    // launch date of the job
     adiak::libraries();     // Libraries used
@@ -120,30 +121,24 @@ int main (int argc, char *argv[]) {
     
     
     if (sort_type == "merge") {
-        //call merge sort 
         parallel_merge_sort(data);
         adiak::value("scalability", "weak"); // The scalability of your algorithm. choices: ("strong", "weak")
-
-    } 
-    
-    else if (sort_type == "bitonic") {
-        // printf("running bitonic\n");
+    } else if (sort_type == "bitonic") {
         // bitonic();
     } else if (sort_type == "radix") {
-        printf("running radix\n");
         testRadix(data);
     } else if (sort_type == "sample") {
-        // printf("running sample\n");
         test_sample(data);
+        adiak::value("scalability", "strong");
     } else {
-        printf("Unknown sort type.");
+        printf("Unknown sort type\n");
+        MPI_Finalize();
+        return 0;
     }
 
+    // Check correctness
     CALI_MARK_BEGIN("correctness_check");
-
-    //checking correctness
     check_sorted(data, sort_type.c_str(), input_type.c_str(), taskid);
-
     CALI_MARK_END("correctness_check");
 
     if (taskid == MASTER) {
@@ -154,51 +149,6 @@ int main (int argc, char *argv[]) {
     mgr.stop();
     mgr.flush();
     MPI_Finalize();
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Can uncomment this and test values if you want
-    // if (taskid == MASTER) {
-    //     printf("==== SORTED ====\n[");
-    //     for (const auto& elm : sorted_vec) {
-    //         printf("%d, ", elm);
-    //     }
-    //     printf("]\n");
-
-    //     printf("==== REVERSE ====\n[");
-    //     for (const auto& elm : reverse_vec) {
-    //         printf("%d, ", elm);
-    //     }
-    //     printf("]\n");
-
-    //     printf("==== SCRAMBLE ====\n[");
-    //     for (const auto& elm : scrambled_vec) {
-    //         printf("%d, ", elm);
-    //     }
-    //     printf("]\n");
-
-    //     printf("==== RANDOM ====\n[");
-    //     for (const auto& elm : random_vec) {
-    //         printf("%d, ", elm);
-    //     }
-    //     printf("]\n");
-
-    // if (is_vec_sorted(reverse_vec)) {
-    //     printf("Vector is sorted\r\n");
-    // } else {
-    //     printf("Vector is NOT sorted\r\n");
-    // }
-    // }
         
     return 0;
 }
