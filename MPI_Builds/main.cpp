@@ -124,7 +124,8 @@ int main (int argc, char *argv[]) {
         parallel_merge_sort(data);
         adiak::value("scalability", "weak"); // The scalability of your algorithm. choices: ("strong", "weak")
     } else if (sort_type == "bitonic") {
-        // bitonic();
+        bitonic(data);
+        adiak::value("scalability", "weak");
     } else if (sort_type == "radix") {
         testRadix(data);
     } else if (sort_type == "sample") {

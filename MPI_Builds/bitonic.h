@@ -12,6 +12,7 @@
 #include <adiak.hpp>
 
 using std::vector;
+using namespace std;
 
 #define MASTER 0
 
