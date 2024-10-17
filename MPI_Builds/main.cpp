@@ -109,12 +109,12 @@ int main (int argc, char *argv[]) {
     adiak::libraries();     // Libraries used
     adiak::cmdline();       // Command line used to launch the job
     adiak::clustername();   // Name of the cluster
-    adiak::value("algorithm", sort_type); // The name of the algorithm you are using (e.g., "merge", "bitonic")
+    adiak::value("algorithm", sort_type); // The name of the algorithm you are using ("sample", "merge", "bitonic", "radix")
     adiak::value("programming_model", "mpi"); // e.g. "mpi"
     adiak::value("data_type", "int"); // The datatype of input elements (e.g., double, int, float)
     adiak::value("size_of_data_type", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
     adiak::value("input_size", array_size); // The number of elements in input dataset (1000)
-    adiak::value("input_type", input_type); // For sorting, this would be choices: ("Sorted", "ReverseSorted", "Random", "1_perc_perturbed")
+    adiak::value("input_type", input_type); // For sorting, this would be choices: ("sorted", "reverse", "random", "1perturbed")
     adiak::value("num_procs", numtasks); // The number of processors (MPI ranks)
     adiak::value("group_num", 8); // The number of your group (integer, e.g., 1, 10)
     adiak::value("implementation_source", "online"); // Where you got the source code of your algorithm. choices: ("online", "ai", "handwritten").
@@ -128,7 +128,7 @@ int main (int argc, char *argv[]) {
     } else if (sort_type == "radix") {
         testRadix(data);
     } else if (sort_type == "sample") {
-        test_sample(data);
+        sample_sort(data, taskid, numtasks);
         adiak::value("scalability", "strong");
     } else {
         printf("Unknown sort type\n");
