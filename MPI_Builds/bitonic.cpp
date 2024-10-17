@@ -48,11 +48,7 @@ void bitonic(std::vector<int>& random) {
             bool ascending = ((rank & k) == 0);
 
             if (partner < size) {
-                CALI_MARK_BEGIN("comp");
-                CALI_MARK_BEGIN("comp_small");
                 compareExchange(local_array, partner, rank, elements_per_process, ascending);
-                CALI_MARK_END("comp_small");
-                CALI_MARK_END("comp");
             }
             CALI_MARK_BEGIN("comm");
             CALI_MARK_BEGIN("comm_small");
@@ -63,8 +59,13 @@ void bitonic(std::vector<int>& random) {
     }
 
     // Gather the sorted subarrays back to the root process
+    CALI_MARK_BEGIN("comm");
+    CALI_MARK_BEGIN("comm_large");
     MPI_Gather(local_array.data(), elements_per_process, MPI_INT, random.data(), elements_per_process, MPI_INT, MASTER, MPI_COMM_WORLD);
+    CALI_MARK_END("comm_large");
+    CALI_MARK_END("comm");
 
+    /*
     if (rank == MASTER)
     {
         std::cout << "Sorted array: ";
@@ -73,6 +74,7 @@ void bitonic(std::vector<int>& random) {
             std::cout << random.at(i) << ", ";
         }
     }
+    */
 }
 
 void compareExchange(std::vector<int>& local_array, int partner, int rank, int elements_per_process, bool ascending) {
@@ -80,12 +82,18 @@ void compareExchange(std::vector<int>& local_array, int partner, int rank, int e
     std::vector<int> partner_array(elements_per_process);
 
     // Send local_array to the partner and receive partner_array from the partner simultaneously
+    CALI_MARK_BEGIN("comm");
+    CALI_MARK_BEGIN("comm_large");
     MPI_Sendrecv(local_array.data(), elements_per_process, MPI_INT, partner, 0,partner_array.data(), elements_per_process, MPI_INT, partner, 0,MPI_COMM_WORLD, &status);
+    CALI_MARK_END("comm_large");
+    CALI_MARK_END("comm");
 
     // Combine the two arrays
+    CALI_MARK_BEGIN("comp");
+    CALI_MARK_BEGIN("comp_large");
     std::vector<int> combined_array(elements_per_process * 2);
     std::merge(local_array.begin(), local_array.end(), partner_array.begin(), partner_array.end(), combined_array.begin());
-
+    
     // Decide which half to keep based on sorting direction and copy selected half back into process local array
     if (ascending) {
         if (rank < partner) {
@@ -104,4 +112,7 @@ void compareExchange(std::vector<int>& local_array, int partner, int rank, int e
             std::copy(combined_array.begin(), combined_array.begin() + elements_per_process, local_array.begin());
         }
     }
+    CALI_MARK_END("comp_large");
+    CALI_MARK_END("comp");
+  
 }
