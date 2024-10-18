@@ -1,3 +1,4 @@
 # Project_2024
 
-This repository contains the necessary materials for the project, including a template for the report
+## Run command
+sbatch mpi.grace_job \<array size> \<number of processes>  \<sort type>  \<scramble type>

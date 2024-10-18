@@ -86,6 +86,11 @@ int main (int argc, char *argv[]) {
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
 
+    // Outputs details on current run
+    if (taskid == MASTER) {
+        printf("\nSort type: %s\nScramble type: %s\nArray length: %d\nNumber of processes: %d\n\n", sort_type.c_str(), input_type.c_str(), array_size, numtasks);
+    }
+
     //Create communicator for worker processes
     MPI_Comm worker_comm;
     int thread_color;

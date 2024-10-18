@@ -8,7 +8,7 @@
 
 using std::vector;
 
-bool debug = true;
+bool debug = false;
 
 void printVector(vector<int>& data) {
     for (int i = 0; i < data.size(); i++) {
@@ -29,14 +29,7 @@ vector<int> radix(std::vector<int>& local_data, int total_elements, int r, int m
     int num_bits = std::ceil(std::log2(max_value + 1));  // Total number of bits in the max_value
     int num_blocks = (num_bits + r - 1) / r;  // Number of r-bit blocks to process
 
-    if (world_rank == 0 && debug) {
-        printf("radix loop has %d blocks\n", num_blocks);
-    }
-
     for (int i = 0; i < num_blocks; i++) {
-        if (debug) {
-            printf("step 1 on process %d\n", world_rank);
-        }
         int shift = i * r;  // The bit position to shift for current r-bit block
         int num_radix_values = 1 << r;
 
@@ -47,9 +40,6 @@ vector<int> radix(std::vector<int>& local_data, int total_elements, int r, int m
             bins[value].push_back(num);
         }
 
-        if (debug) {
-            printf("step 2 on process %d\n", world_rank);
-        }
 
         // Step 2: Prepare send counts for all-to-all communication
         std::vector<int> send_counts(world_size, 0);
@@ -84,9 +74,6 @@ vector<int> radix(std::vector<int>& local_data, int total_elements, int r, int m
             temp_counts[dest_proc] += bins[value].size();
         }
 
-        if (debug) {
-            printf("step 3 on process %d\n", world_rank);
-        }
 
         // Exchange send counts to get receive counts
         std::vector<int> recv_counts(world_size, 0);
@@ -116,10 +103,6 @@ vector<int> radix(std::vector<int>& local_data, int total_elements, int r, int m
 		CALI_MARK_END("comm");
         // Update local_data with the received data for the next iteration
         local_data = recv_buffer;
-
-        if (debug) {
-            printf("end loop on process %d\n", world_rank);
-        }
     }
 
     // After all radix passes, local_data is sorted locally
