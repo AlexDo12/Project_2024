@@ -1,0 +1,6 @@
+1. Fill in the algorithm with your algorithm
+2. python3 generate_commands.py
+3. Move the commands.txt and run_commands.sh files to your grace scratch directory
+4. Run ". run_commands.sh"
+
+Side note: We need to adjust memory for the larger sizes once we fine tune how much we need.
