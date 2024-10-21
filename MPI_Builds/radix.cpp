@@ -141,6 +141,10 @@ void testRadix(vector<int>& data) {
     int data_size = 0;
 
     // Root process sets data_size, others receive it
+    if (world_rank == 0) {
+        data_size = data.size();
+    }
+    
 	CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
     MPI_Bcast(&data_size, 1, MPI_INT, 0, MPI_COMM_WORLD);
