@@ -22,25 +22,35 @@ int getBits(int num, int shift, int r) {
 }
 
 vector<int> radix(std::vector<int>& local_data, int total_elements, int r, int max_value, MPI_Comm comm) {
+    CALI_MARK_BEGIN("comp");
+    CALI_MARK_BEGIN("comp_small");
     int world_size, world_rank;
     MPI_Comm_size(comm, &world_size);
     MPI_Comm_rank(comm, &world_rank);
 
     int num_bits = std::ceil(std::log2(max_value + 1));  // Total number of bits in the max_value
     int num_blocks = (num_bits + r - 1) / r;  // Number of r-bit blocks to process
+    CALI_MARK_END("comp_small");
+    CALI_MARK_END("comp");
 
     for (int i = 0; i < num_blocks; i++) {
         int shift = i * r;  // The bit position to shift for current r-bit block
         int num_radix_values = 1 << r;
 
+        CALI_MARK_BEGIN("comp");
+        CALI_MARK_BEGIN("comp_large");
         // Step 1: Assign elements to bins based on radix value
         std::vector<std::vector<int>> bins(num_radix_values);
         for (int num : local_data) {
             int value = (num >> shift) & ((1 << r) - 1);
             bins[value].push_back(num);
         }
+        CALI_MARK_END("comp_large");
+        CALI_MARK_END("comp");
 
 
+        CALI_MARK_BEGIN("comp");
+        CALI_MARK_BEGIN("comp_small");
         // Step 2: Prepare send counts for all-to-all communication
         std::vector<int> send_counts(world_size, 0);
         std::vector<int> send_displs(world_size, 0);
@@ -54,6 +64,8 @@ vector<int> radix(std::vector<int>& local_data, int total_elements, int r, int m
             if (dest_proc >= world_size) dest_proc = world_size - 1;
             send_counts[dest_proc] += bins[value].size();
         }
+        CALI_MARK_END("comp_small");
+        CALI_MARK_END("comp");
 
         // Compute send displacements
         int total_send = 0;
@@ -84,6 +96,9 @@ vector<int> radix(std::vector<int>& local_data, int total_elements, int r, int m
                      recv_counts.data(), 1, MPI_INT, comm);
 		CALI_MARK_END("comm_large");
 		CALI_MARK_END("comm");
+
+        CALI_MARK_BEGIN("comp");
+        CALI_MARK_BEGIN("comp_small");
         // Compute receive displacements
         std::vector<int> recv_displs(world_size, 0);
         int total_recv = 0;
@@ -91,6 +106,8 @@ vector<int> radix(std::vector<int>& local_data, int total_elements, int r, int m
             recv_displs[j] = total_recv;
             total_recv += recv_counts[j];
         }
+        CALI_MARK_END("comp_small");
+        CALI_MARK_END("comp");
 
         // Prepare receive buffer
         std::vector<int> recv_buffer(total_recv);
@@ -112,6 +129,10 @@ vector<int> radix(std::vector<int>& local_data, int total_elements, int r, int m
     return local_data;
 }
 
+
+
+
+
 void testRadix(vector<int>& data) {
     int world_rank, world_size;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
@@ -120,15 +141,14 @@ void testRadix(vector<int>& data) {
     int data_size = 0;
 
     // Root process sets data_size, others receive it
-    if (world_rank == 0) {
-        data_size = data.size();
-    }
-	
 	CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
     MPI_Bcast(&data_size, 1, MPI_INT, 0, MPI_COMM_WORLD);
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
+
+    CALI_MARK_BEGIN("comp");
+    CALI_MARK_BEGIN("comp_small");
     // Now all processes have data_size
     int chunkLength = data_size / world_size;
     int remainder = data_size % world_size;
@@ -144,6 +164,8 @@ void testRadix(vector<int>& data) {
 
     int local_size = counts[world_rank];
     vector<int> currchunk(local_size);
+    CALI_MARK_END("comp_small");
+    CALI_MARK_END("comp");
 
 	CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
@@ -153,9 +175,6 @@ void testRadix(vector<int>& data) {
                  currchunk.data(), local_size, MPI_INT, 0, MPI_COMM_WORLD);
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
-    if (world_rank == 0 && debug) {
-        printf("entering radix\n");
-    }
 
     // Find the maximum value across all processes
     int local_max = (local_size > 0) ? *std::max_element(currchunk.begin(), currchunk.end()) : 0;
@@ -170,10 +189,6 @@ void testRadix(vector<int>& data) {
     // Sort array using radix sort
     vector<int> output = radix(currchunk, data_size, 8, global_max, MPI_COMM_WORLD);
 
-    if (world_rank == 0 && debug) {
-        printf("\n\nradix complete ... checking output\n");
-    }
-
     // Gather the sizes of the output vectors from all processes
     int local_output_size = output.size();
 
@@ -184,6 +199,8 @@ void testRadix(vector<int>& data) {
                world_rank == 0 ? recv_counts.data() : NULL, 1, MPI_INT, 0, MPI_COMM_WORLD);
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
+
+
     // Compute displacements on root process
     std::vector<int> recv_displs(world_size);
     if (world_rank == 0) {
@@ -193,12 +210,16 @@ void testRadix(vector<int>& data) {
         }
     }
 
+    CALI_MARK_BEGIN("comp");
+    CALI_MARK_BEGIN("comp_small");
     // Gather the sorted data back to the root process
     vector<int> global_data;
     if (world_rank == 0) {
         int total_size = recv_displs[world_size - 1] + recv_counts[world_size - 1];
         global_data.resize(total_size);
     }
+    CALI_MARK_END("comp_small");
+    CALI_MARK_END("comp");
 
 	CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
@@ -210,10 +231,15 @@ void testRadix(vector<int>& data) {
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 	
+
+    CALI_MARK_BEGIN("comp");
+    CALI_MARK_BEGIN("comp_small");
     // Update data on the root process
     if (world_rank == 0) {
         data = global_data;
     }
+    CALI_MARK_END("comp_small");
+    CALI_MARK_END("comp");
 
     if (world_rank == 0 && debug) {
         printf("Sorted array:\n");
