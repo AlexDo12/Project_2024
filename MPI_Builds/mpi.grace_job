@@ -27,6 +27,6 @@ module load CMake/3.12.1
 module load GCCcore/8.3.0
 module load PAPI/6.0.0
 
-CALI_CONFIG="spot(output=p${processes}-a${array_size}.cali, \
+CALI_CONFIG="spot(output=p${processes}-a${array_size}-s${sort_size}-i${input_type}.cali, \
     time.variance,profile.mpi)" \
 mpirun -np $processes ./main $array_size $sort_size $input_type
