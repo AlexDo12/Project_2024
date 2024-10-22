@@ -2,9 +2,7 @@
 
 import math
 
-# input_sizes = [2**16, 2**18, 2**20, 2**22, 2**24, 2**26, 2**28]
-input_sizes = [2**16, 2**18, 2**20, 2**22]
-# input_sizes = [2**24, 2**26, 2**28]
+input_sizes = [2**16, 2**18, 2**20, 2**22, 2**24, 2**26, 2**28]
 input_types = ['sorted', 'reverse', '1perturbed', 'random']
 # num_procs = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 num_procs = [1024]
