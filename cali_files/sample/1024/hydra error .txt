@@ -1,0 +1,63 @@
+
+Inactive Modules:
+  1) UCX/1.9.0     2) numactl/2.0.13
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) binutils/2.35     2) zlib/1.2.11
+
+The following have been reloaded with a version change:
+  1) GCCcore/10.2.0 => GCCcore/8.3.0
+
+[bstrap:0:-1@c266.cluster] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c270 (pid 160317, exit code 49152)
+[bstrap:0:-1@c266.cluster] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c266.cluster] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c266.cluster] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:772): error waiting for event
+[bstrap:0:-1@c266.cluster] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:345): error setting up the bstrap proxies
+[bstrap:0:-1@c266.cluster] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+[bstrap:0:-1@c658.cluster] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c665 (pid 70494, exit code 49152)
+[bstrap:0:-1@c658.cluster] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c658.cluster] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c658.cluster] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:772): error waiting for event
+[bstrap:0:-1@c658.cluster] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:345): error setting up the bstrap proxies
+[bstrap:0:-1@c658.cluster] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+[bstrap:0:-1@c513.cluster] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c525 (pid 190984, exit code 49152)
+[bstrap:0:-1@c513.cluster] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c513.cluster] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c513.cluster] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:772): error waiting for event
+[bstrap:0:-1@c513.cluster] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:345): error setting up the bstrap proxies
+[bstrap:0:-1@c513.cluster] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+[bstrap:0:-1@c041.cluster] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c043 (pid 19411, exit code 49152)
+[bstrap:0:-1@c041.cluster] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c041.cluster] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c041.cluster] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:772): error waiting for event
+[bstrap:0:-1@c041.cluster] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:345): error setting up the bstrap proxies
+[bstrap:0:-1@c041.cluster] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+[bstrap:0:-1@c208.cluster] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c222 (pid 270667, exit code 49152)
+[bstrap:0:-1@c208.cluster] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c208.cluster] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c208.cluster] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:772): error waiting for event
+[bstrap:0:-1@c208.cluster] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:345): error setting up the bstrap proxies
+[bstrap:0:-1@c208.cluster] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+srun: error: c513: task 12: Exited with exit code 5
+[bstrap:0:-1@c513.cluster] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:594): error sending proxy ID upstream
+srun: error: c041: task 0: Exited with exit code 5
+srun: error: c266: task 10: Exited with exit code 5
+[bstrap:0:-1@c266.cluster] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:594): error sending proxy ID upstream
+[bstrap:0:-1@c658.cluster] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:594): error sending proxy ID upstream
+[bstrap:0:-1@c041.cluster] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:594): error sending proxy ID upstream
+[bstrap:0:-1@c208.cluster] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:594): error sending proxy ID upstream
+srun: error: c208: task 9: Exited with exit code 5
+srun: error: c658: task 15: Exited with exit code 5
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 11777809 ON c041 CANCELLED AT 2024-10-22T03:53:04 ***
