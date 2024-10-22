@@ -8,4 +8,5 @@ CMakeCache.txt
 cmake_install.cmake
 main
 Makefile
+automation/commands.txt
 
