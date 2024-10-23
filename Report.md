@@ -313,7 +313,7 @@ CALI_MARK_END("comp");
 ### 3b. Collect Metadata
 
 #### Sample Sort
-![Sample Sort Metadata](Images/metadata_calltree/sample_sort_cali_metadata.png)
+![Sample Sort Metadata](Images/metadata_calltree/sample_sort_metadata.png)
 
 Have the following code in your programs to collect metadata:
 ```
