@@ -420,6 +420,61 @@ Average Weak scaling on comp
 
 On average, the time per process increases with number of cores and array size. The communication time has some inconsistancy that is likely due factors outside of my control, such as notes being physicaly far apart or congestion on the network. 
 
+
+
+### Sample Sort
+#### NOTE: All plots with full metrics are available in Images/sample_sort_plots/ (i graphed the avg plots below)
+#### I was unable to get 1024 processors to run due to the hydra error. This file is in cali_files/sample/1024
+
+
+
+### Strong Scaling 
+
+Max strong scaling on main
+![max speedup main](Images/sample_sort_plots/avg/strongscaling_avg_1perturbed_main_size268435456.png)
+
+Max strong scaling on comp
+![max speedup main](Images/sample_sort_plots/avg/strongscaling_avg_1perturbed_comp_large_size268435456.png)
+
+Max strong scaling on comm
+![max speedup main](Images/sample_sort_plots/avg/strongscaling_avg_1perturbed_comm_size268435456.png)
+
+
+The performance of the parallel sort algorithm shows varying perofmance across input types, witht 1pertubed scaling the worst due to a load imbalance and high communication overhead. While computational tasks scale well with more processors, communication heavy tasks face diminishing returns as processor counts increase, especially for small input sizes. This suggests the algorithm is limited by both load imbalance and communication overhead, with performance highly dependent on input distribution. If we needed to speed it up, optimizing communication and load balancing could improve scaling efficiency.
+
+
+### Strong Scaling Speedup
+
+Max speedup on comm
+![max speedup main](Images/sample_sort_plots/avg/speedup_avg_random_comm_size268435456.png)
+
+Max speedup on comp
+![max speedup main](Images/sample_sort_plots/avg/speedup_avg_random_comp_large_size268435456.png)
+
+Max speedup on main
+![max speedup main](Images/sample_sort_plots/avg/speedup_avg_random_main_size268435456.png)
+
+
+The speedup analysis for the sample sort algorithm shows that computational tasks scale well across all input types, exhibiting near-linear speedup. However, communication-heavy tasks suffer from diminishing returns, particularly after 300 processors, with erratic behavior for the random input. In the main node, speedup is inconsistent, with sorted and reverse inputs plateauing and 1perturbed showing poor scaling. This indicates that the algorithm's performance is limited by communication overhead and load imbalance, especially for irregular input distributions like 1perturbed.
+
+
+### Weak Scaling
+Max Weak scaling on main
+![max speedup main](Images/sample_sort_plots/avg/weakscaling_avg_main.png)
+
+Max Weak scaling on comm
+![max speedup main](Images/sample_sort_plots/avg/weakscaling_avg_comm.png)
+
+
+Max Weak scaling on comp
+![max speedup main](Images/sample_sort_plots/avg/weakscaling_avg_comp_large.png)
+
+
+The weak scaling of the parallel sample sort algorithm shows that computational tasks scale well with minimal increase in time per rank, but communication-heavy tasks suffer from significant overhead as the number of processors increases, particularly with 1perturbed data. The main node also experiences increased times, especially for sorted and 1perturbed inputs, indicating that communication dominates as the input size and processors grow. This suggests the algorithm is limited by communication bottlenecks and load imbalance, especially for irregular input types. This could most likely be optimized to improve weak sacling efficiency.
+
+
+
+
 ## 5. Presentation
 Plots for the presentation should be as follows:
 - For each implementation:
