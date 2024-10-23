@@ -240,6 +240,10 @@ and merged, efficiently balancing computation and communication across all proce
 Please use the caliper build `/scratch/group/csce435-f24/Caliper/caliper/share/cmake/caliper` 
 (same as lab2 build.sh) to collect caliper files for each experiment you run.
 
+#### Sample Sort
+![Sample Sort Cali Graph](Images/metadata_calltree/sample_sort_cali_graph.png)
+
+
 Your Caliper annotations should result in the following calltree
 (use `Thicket.tree()` to see the calltree):
 ```
@@ -309,7 +313,7 @@ CALI_MARK_END("comp");
 ### 3b. Collect Metadata
 
 #### Sample Sort
-![alt text](images/"Metadata and Calltrees"/sample_sort_cali_graph.png)
+![Sample Sort Metadata](Images/metadata_calltree/sample_sort_cali_metadata.png)
 
 Have the following code in your programs to collect metadata:
 ```
