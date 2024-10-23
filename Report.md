@@ -308,6 +308,9 @@ CALI_MARK_END("comp");
 
 ### 3b. Collect Metadata
 
+#### Sample Sort
+![alt text](image.png)
+
 Have the following code in your programs to collect metadata:
 ```
 adiak::init(NULL);
