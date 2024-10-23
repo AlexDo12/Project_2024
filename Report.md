@@ -320,24 +320,24 @@ Average speedup on comp
 Random input overall shows significantly higher speedup than the other input types: sorted/reverse/1perturbed. This suggests the overall program is limited by both computation and communication overhead, which makes sense because random input likely benefits most from parallelization as work is more evenly distributed. As a result, it shows that communication patterns are highly dependent on input type, and that speedup is bounded by the communication overhead since the curves initially show modest speedup but then level off quickly at higher processor counts.
 
 Average Strong scaling on main
-![avg speedup main](Images/Bitonic/Strong_Scaling/strongscaling_avg_1perturbed_main_size268435456.png)
+![avg speedup main](Images/Bitonic/Strong%20Scaling/strongscaling_avg_1perturbed_main_size268435456.png)
 
 Average Strong scaling on comm
-![Strong scaling comm](Images/Bitonic/Strong_Scaling/strongscaling_avg_1perturbed_comm_size268435456.png)
+![Strong scaling comm](Images/Bitonic/Strong%20Scaling/strongscaling_avg_1perturbed_comm_size268435456.png)
 
 Average Strong scaling on comp
-![Strong scaling comp](Images/Bitonic/Strong_Scaling/strongscaling_avg_1perturbed_comp_large_size268435456.png)
+![Strong scaling comp](Images/Bitonic/Strong%20Scaling/strongscaling_avg_1perturbed_comp_large_size268435456.png)
 
 Regarding the main node, the scaling behavior shows initial performance improvement around lower processor counts, but after that, adding more processors provides diminishing returns or even hurts performance. Regarding the communication node, the performance is less predictable compared to other nodes and it's relatively erratic, suggesting communication overhead is becoming a bottleneck since bitonic sort requires significant communication between processors. Regarding the large computation node, it similarly shows rapid initial performance improvement that eventually levels off. Overall, the diminishing returns with increasing processor count is following Amdahl's Law behavior in the main and large computation node. The spikes and irregularities in performance, like in the communication node, suggest load balancing issues since Grace was heavily utilized during runs due to long queue times.
 
 Average Weak scaling on main
-![Weak scaling main](Images/Bitonic/Weak_Scaling/weakscaling_avg_main.png)
+![Weak scaling main](Images/Bitonic/Weak%20Scaling/weakscaling_avg_main.png)
 
 Average Weak scaling on comm
-![Weak scaling comm](Images/Bitonic/Weak_Scaling/weakscaling_avg_comm.png)
+![Weak scaling comm](Images/Bitonic/Weak%20Scaling/weakscaling_avg_comm.png)
 
 Average Weak scaling on comp
-![Weak scaling comp](Images/Bitonic/Weak_Scaling/weakscaling_avg_comp_large.png)
+![Weak scaling comp](Images/Bitonic/Weak%20Scaling/weakscaling_avg_comp_large.png)
 
 In weak scaling, the goal is to maintain the workload per processor constant as the problem size and the number of processors increases proportionally. The average time per processor should remain constant if the algorithm scales perfectly, but the algorithm doesn't demonstrate ideal weak scaling, which would be a horizontal constant line. In all four input types, the average time per process increases steadily as the number of processors increases, suggesting that there is some overhead or inefficiency scaling with the number of processors. After the sharp rise, the scaling curve becomes more gradual but continues to increase. The increasing execution time with more processors, despite keeping the problem size per processor constant, indicates the communication overhead is becoming dominant because bitonic sort requires O(logN) parallel steps, so the communication becomes more complex as more processors are added. Even though each processor has to deal with the same 'n' elements in weak scaling, each processor must participate in more communication rounds as the system gets larger and the number of communication rounds increases logarithmically with P.
 
