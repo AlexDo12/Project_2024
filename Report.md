@@ -303,6 +303,41 @@ perform runs that invoke algorithm2 for Sorted, ReverseSorted, and Random data).
     - Total time
     - Variance time/rank
 
+#### Radix Sort  
+#### All requested graphs can be found in the Images/radix/... directory. Only the average cases are displayed below. Min/max/total/variance are located in the images directory. 
+Average speedup on main
+![avg speedup main](Images/radix/avg/speedup_avg_random_main_size268435456.png)
+
+Average speedup on comm
+![avg speedup comm](Images/radix/avg/speedup_avg_random_comm_size268435456.png)
+
+Average speedup on comp
+![avg speedup comp](Images/radix/avg/speedup_avg_random_comp_large_size268435456.png)
+
+On average, the speedup is consistant and increasing for the computation. More process would be needed to potentially find a limit. Although the computation speedup is linear with increasing processes, the communication overhead increases significantly with more processes, leading to a stall in the overall speedup of the program as more processes are used for the array sizes tested.
+
+Average Strong scaling on main
+![avg speedup main](Images/radix/avg/strongscaling_avg_1perturbed_main_size268435456.png)
+
+Average Strong scalingp on comm
+![Strong scaling comm](Images/radix/avg/strongscaling_avg_1perturbed_comm_size268435456.png)
+
+Average Strong scaling on comp
+![Strong scaling comp](Images/radix/avg/strongscaling_avg_1perturbed_comp_large_size268435456.png)
+
+As depicted in the graphs, radix sort does scale strongly to a certian point. The algorythm does experiance massive gains if the array length is reasonably long compared to the number of processes available. One thing of note is that the average time per process increases significantly if there are too many processes for an array length. This is due to the increasing overhead that all the inter process communication requires. 
+
+
+Average Weak scaling on main
+![Weak scaling main](Images/radix/avg/weakscaling_avg_main.png)
+
+Average Weak scaling on comm
+![Weak scaling comm](Images/radix/avg/weakscaling_avg_comm.png)
+
+Average Weak scaling on comp
+![Weak scaling comp](Images/radix/avg/weakscaling_avg_comp_large.png)
+
+On average, the time per process increases with number of cores and array size. The communication time has some inconsistancy that is likely due factors outside of my control, such as notes being physicaly far apart or congestion on the network. 
 
 ## 5. Presentation
 Plots for the presentation should be as follows:
