@@ -241,12 +241,17 @@ and merged, efficiently balancing computation and communication across all proce
 ### Sample Sort
 ![Sample Sort Cali Graph](Images/metadata_calltree/sample_sort_cali_graph.png)
 
+### Merge Sort
+![Merge Sort Cali Graph](Images/metadata_calltree/merge_sort_calltree.png)
 
 
 ### 3b. Collect Metadata
 
 #### Sample Sort
 ![Sample Sort Metadata](Images/metadata_calltree/sample_sort_metadata.png)
+
+#### Sample Sort
+![Merge Sort Metadata](Images/metadata_calltree/mergesort_metadata.png)
 
 
 
