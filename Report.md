@@ -247,6 +247,10 @@ and merged, efficiently balancing computation and communication across all proce
 ### Bitonic Sort
 ![Bitonic Sort Cali Graph](Images/metadata_calltree/bitonic_sort_calltree.png)
 
+### Radix Sort
+![Merge Sort Cali Graph](Images/metadata_calltree/radix_sort_cali_graph.png)
+
+
 ### 3b. Collect Metadata
 
 #### Sample Sort
@@ -257,6 +261,10 @@ and merged, efficiently balancing computation and communication across all proce
 
 #### Bitonic Sort
 ![Bitonic Sort Metadata](Images/metadata_calltree/bitonic_sort_metadata.png)
+
+#### Radix Sort
+![Merge Sort Metadata](Images/metadata_calltree/radix_metadata.png)
+
 
 ## 4. Performance evaluation
 
