@@ -250,7 +250,7 @@ and merged, efficiently balancing computation and communication across all proce
 #### Sample Sort
 ![Sample Sort Metadata](Images/metadata_calltree/sample_sort_metadata.png)
 
-#### Sample Sort
+#### Merge Sort
 ![Merge Sort Metadata](Images/metadata_calltree/mergesort_metadata.png)
 
 
