@@ -344,7 +344,7 @@ In weak scaling, the goal is to maintain the workload per processor constant as 
 ### Merge Sort
 ### DISCLAIMER: All plots with full metrics are available in Images/mergesort_plots/ \
 ### For my analysis, I chose to analyze the max time across all plots due to the professors recommendation during lecture. 
-
+### Note: I kept getting Hydra memory issues for 1024 runs, so they weren't included in the following graphs. 
 ### Strong Scaling Speedup
 
 Max speedup on comm
