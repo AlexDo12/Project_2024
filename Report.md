@@ -344,8 +344,9 @@ Max Weak scaling on comp
 
 When simulating weak scaling tests on my algorithm, I noticed that all categories (main, comp_large, and comm) seem to follow the same trend of increasing max_time as the number of processors increases. This is because the problem size remains constant, and as the number of processors increases, a risk for bottlenecks may occur. These bottlenecks affect the “comm” portion of the algorithm because the volume of data to be exchanged within the network increases. This mostly affects the “merging arrays back to the master process” portion of the merge sort algorithm. 
 
-#### Radix Sort  
+### Radix Sort  
 #### All requested graphs can be found in the Images/radix/... directory. Only the average cases are displayed below. Min/max/total/variance are located in the images directory. 
+#### 1024 processes is not included as almost all attempts led to hydra memory errors. 
 Average speedup on main
 ![avg speedup main](Images/radix/avg/speedup_avg_random_main_size268435456.png)
 
