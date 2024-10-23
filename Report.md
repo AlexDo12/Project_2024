@@ -302,6 +302,47 @@ perform runs that invoke algorithm2 for Sorted, ReverseSorted, and Random data).
     - Avg time/rank
     - Total time
     - Variance time/rank
+### Merge Sort
+### DISCLAIMER: All plots with full metrics are available in Images/mergesort_plots/ \
+### For my analysis, I chose to analyze the max time across all plots due to the professors recommendation during lecture. 
+
+### Strong Scaling Speedup
+
+Max speedup on comm
+![max speedup main](Images/mergesort_plots/max/speedup_max_random_comm_size268435456.png)
+
+Max speedup on comp
+![max speedup comm](Images/mergesort_plots/max/speedup_max_random_comp_large_size268435456.png)
+
+Max speedup on main
+![max speedup comp](Images/mergesort_plots/max/speedup_max_random_main_size268435456.png)
+
+For the most part, all input types (sorted, reverse, random, and 1perturbed) follow the same trend of slowing down as the number of processors increases. This cannot be said about the 'comm' category, as the speedup seems to rise with the number of processors. This may be because all the MPI calls perform better with increased parallelism, where communication overhead is distributed more evenly across multiple processes, and certain collective communication operations (such as broadcast, scatter, and gather) become more efficient as the workload scales.
+
+### Strong Scaling 
+
+Max strong scaling on main
+![max speedup main](Images/mergesort_plots/max/strongscaling_max_1perturbed_main_size268435456.png)
+
+Max strong scaling on comp
+![max speedup comm](Images/mergesort_plots/max/strongscaling_max_1perturbed_comp_large_size268435456.png)
+
+Max strong scaling on comm
+![max speedup comp](Images/mergesort_plots/max/strongscaling_max_1perturbed_comm_size268435456.png)
+
+When performing strong scaling tests on my algorithm, both the 'main' and 'comp_large' portions of the CALI markings show an increase in their maximum time for all input sizes as the number of processors increases. This is expected, as more processors can introduce higher overhead from factors like increased synchronization or load imbalance in computational tasks. However, the 'comm' portion does not show a clear trend among the plots. This is because the maximum time for certain communication operations varies based on different input sizes and input types. In addition, communication patterns can change depending on the distribution of work, message sizes, and network contention, leading to varying results.
+
+### Weak Scaling
+Max Weak scaling on main
+![Weak scaling main](Images/mergesort_plots/max/weakscaling_max_main.png)
+
+Max Weak scaling on comm
+![Weak scaling comm](Images/mergesort_plots/max/weakscaling_max_comm.png)
+
+Max Weak scaling on comp
+![Weak scaling comp](Images/mergesort_plots/max/weakscaling_max_comp_large.png)
+
+When simulating weak scaling tests on my algorithm, I noticed that all categories (main, comp_large, and comm) seem to follow the same trend of increasing max_time as the number of processors increases. This is because the problem size remains constant, and as the number of processors increases, a risk for bottlenecks may occur. These bottlenecks affect the “comm” portion of the algorithm because the volume of data to be exchanged within the network increases. This mostly affects the “merging arrays back to the master process” portion of the merge sort algorithm. 
 
 #### Radix Sort  
 #### All requested graphs can be found in the Images/radix/... directory. Only the average cases are displayed below. Min/max/total/variance are located in the images directory. 
