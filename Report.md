@@ -434,10 +434,10 @@ Max strong scaling on main
 ![max speedup main](Images/sample_sort_plots/avg/strongscaling_avg_1perturbed_main_size268435456.png)
 
 Max strong scaling on comp
-![max speedup main](Images/sample_sort_plots/avg/strongscaling_avg_1perturbed_comp_large_size268435456.png)
+![max speedup comp](Images/sample_sort_plots/avg/strongscaling_avg_1perturbed_comp_large_size268435456.png)
 
 Max strong scaling on comm
-![max speedup main](Images/sample_sort_plots/avg/strongscaling_avg_1perturbed_comm_size268435456.png)
+![max speedup comm](Images/sample_sort_plots/avg/strongscaling_avg_1perturbed_comm_size268435456.png)
 
 
 The performance of the parallel sort algorithm shows varying perofmance across input types, witht 1pertubed scaling the worst due to a load imbalance and high communication overhead. While computational tasks scale well with more processors, communication heavy tasks face diminishing returns as processor counts increase, especially for small input sizes. This suggests the algorithm is limited by both load imbalance and communication overhead, with performance highly dependent on input distribution. If we needed to speed it up, optimizing communication and load balancing could improve scaling efficiency.
@@ -446,13 +446,13 @@ The performance of the parallel sort algorithm shows varying perofmance across i
 ### Strong Scaling Speedup
 
 Max speedup on comm
-![max speedup main](Images/sample_sort_plots/avg/speedup_avg_random_comm_size268435456.png)
+![strong scaling comm](Images/sample_sort_plots/avg/speedup_avg_random_comm_size268435456.png)
 
 Max speedup on comp
-![max speedup main](Images/sample_sort_plots/avg/speedup_avg_random_comp_large_size268435456.png)
+![strong scaling comp](Images/sample_sort_plots/avg/speedup_avg_random_comp_large_size268435456.png)
 
 Max speedup on main
-![max speedup main](Images/sample_sort_plots/avg/speedup_avg_random_main_size268435456.png)
+![strong scaling main](Images/sample_sort_plots/avg/speedup_avg_random_main_size268435456.png)
 
 
 The speedup analysis for the sample sort algorithm shows that computational tasks scale well across all input types, exhibiting near-linear speedup. However, communication-heavy tasks suffer from diminishing returns, particularly after 300 processors, with erratic behavior for the random input. In the main node, speedup is inconsistent, with sorted and reverse inputs plateauing and 1perturbed showing poor scaling. This indicates that the algorithm's performance is limited by communication overhead and load imbalance, especially for irregular input distributions like 1perturbed.
@@ -460,14 +460,14 @@ The speedup analysis for the sample sort algorithm shows that computational task
 
 ### Weak Scaling
 Max Weak scaling on main
-![max speedup main](Images/sample_sort_plots/avg/weakscaling_avg_main.png)
+![weak scaling main](Images/sample_sort_plots/avg/weakscaling_avg_main.png)
 
 Max Weak scaling on comm
-![max speedup main](Images/sample_sort_plots/avg/weakscaling_avg_comm.png)
+![weak scaling comm](Images/sample_sort_plots/avg/weakscaling_avg_comm.png)
 
 
 Max Weak scaling on comp
-![max speedup main](Images/sample_sort_plots/avg/weakscaling_avg_comp_large.png)
+![weak scaling comp](Images/sample_sort_plots/avg/weakscaling_avg_comp_large.png)
 
 
 The weak scaling of the parallel sample sort algorithm shows that computational tasks scale well with minimal increase in time per rank, but communication-heavy tasks suffer from significant overhead as the number of processors increases, particularly with 1perturbed data. The main node also experiences increased times, especially for sorted and 1perturbed inputs, indicating that communication dominates as the input size and processors grow. This suggests the algorithm is limited by communication bottlenecks and load imbalance, especially for irregular input types. This could most likely be optimized to improve weak sacling efficiency.
@@ -484,6 +484,36 @@ Plots for the presentation should be as follows:
         - Weak scaling plots for each input_type (4 plots)
 
 Analyze these plots and choose a subset to present and explain in your presentation.
+
+The 9 slides from the presentation are included below:
+
+Slide 1:
+![Slide 1](Images/presentation_slides/1.png)
+
+Slide 2:
+![Slide 2](Images/presentation_slides/2.png)
+
+Slide 3:
+![Slide 3](Images/presentation_slides/3.png)
+
+Slide 4:
+![Slide 4](Images/presentation_slides/4.png)
+
+Slide 5:
+![Slide 5](Images/presentation_slides/5.png)
+
+Slide 6:
+![Slide 6](Images/presentation_slides/6.png)
+
+Slide 7:
+![Slide 7](Images/presentation_slides/7.png)
+
+Slide 8:
+![Slide 8](Images/presentation_slides/8.png)
+
+Slide 9:
+![Slide 9](Images/presentation_slides/9.png)
+
 
 ## 6. Final Report
 Submit a zip named `TeamX.zip` where `X` is your team number. The zip should contain the following files:
